@@ -6,8 +6,8 @@
   <% if @meals.size <= 0 %>
     List is still empty
   <% end %>
+  <table class="meal-list-item">
   <% @meals.each do |meal| %>
-      <table class="meal-list-item">
         <tr>
           <td>
             <h3><%= link_to meal.name, meal_path(meal)%></h3>
@@ -31,6 +31,6 @@
             <%= meal.ordersCount %>
           </td>
         </tr>
-      </table>
   <% end %>
+  </table>
 </div>

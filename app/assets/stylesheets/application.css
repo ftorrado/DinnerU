@@ -29,6 +29,9 @@ table.meal-list-item th, table.meal-list-item td {
     vertical-align: baseline;
     border-left: solid 1px #bbb;
 }
+table.meal-list-item tr:nth-child(even) {
+    border-bottom: solid 1px #bbb;
+}
 
 .input {
     margin-bottom: 1em;
@@ -50,7 +53,7 @@ table.meal-list-item th, table.meal-list-item td {
     background-color: #f4f4f4;
     border: #eaeaea 1px solid;
     transition: height 0.5s ease;
-    padding-top: 25px;
+    padding-top: 0;
 }
 .search-helper.hidden > div {
     max-height: 20px;

@@ -22,8 +22,10 @@
     <%= render 'orders/form' %>
   </div>
 
-  <% if @meal.ordersCount > 0 %>
-    <%= render @meal.orders %>
+  <% if !@meal.orders.nil? && !@meal.orders.blank? %>
+      <div class="row">
+        <%= render @meal.orders %>
+      </div>
   <% end %>
 
 
