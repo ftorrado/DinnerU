@@ -1,0 +1,41 @@
+<%= form_for @meal do |f| %>
+
+    <% if @meal.errors.any? %>
+        <div id="error_explanation" class="well">
+          <h2>
+            <%= pluralize(@meal.errors.count, "error") %> prohibited
+            this meal from being saved:
+          </h2>
+          <ul>
+            <% @meal.errors.full_messages.each do |msg| %>
+                <li><%= msg %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
+
+    <p>
+      <%= f.label :name %><br>
+      <%= f.text_field :name, :class => 'form-control' %>
+    </p>
+
+    <p>
+      <%= f.label :location %><br>
+      <%= f.text_field :location, :class => 'form-control' %>
+    </p>
+
+    <p>
+      <%= f.label :date %><br>
+      <%= f.text_field :date, :class => 'form-control' %>
+    </p>
+
+    <p class="margin-top">
+      <div class="btn-group btn-group-justified">
+        <%= link_to raw('<i class="fa fa-chevron-left"></i> Back'), meals_path, :class => 'btn btn-lg btn-default' %>
+        <div class="btn-group">
+          <%= f.submit :class => 'text-right btn btn-lg btn-primary' %>
+        </div>
+      </div>
+    </p>
+
+<% end %>

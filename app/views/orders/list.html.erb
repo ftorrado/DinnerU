@@ -1,0 +1,23 @@
+<div>
+  <% if @orders.blank? %>
+    No results found
+  <% end %>
+  <% @orders.each do |order| %>
+      <ul class="list-group">
+        <repeat group="{{ @families }}" value="@family">
+          <a href="" class="element list-group-item">
+						<span>
+							<img src="{{ $family->getFamilyPictureSrc() }}" alt="Pic" width="48" height="48" />
+							<span class="username">{{ @family.members[0].name }}</span>
+							<span class="familyname">{{ @family.name }}</span>
+							<span class="hidden helper-value">{{ @family._id }}</span>
+						</span>
+          </a>
+        </repeat>
+      </ul>
+    </true>
+    <false>
+      <p>Não foram encontrados resultados para a pesquisa</p>
+    </false>
+  </check>
+</div>

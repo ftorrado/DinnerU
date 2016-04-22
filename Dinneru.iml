@@ -28,6 +28,7 @@
     <orderEntry type="library" scope="PROVIDED" name="activejob (v4.2.6, ruby-2.2.3-p173) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="activemodel (v4.2.6, ruby-2.2.3-p173) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="activerecord (v4.2.6, ruby-2.2.3-p173) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="activeresource (v4.0.0, ruby-2.2.3-p173) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="activesupport (v4.2.6, ruby-2.2.3-p173) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="arel (v6.0.3, ruby-2.2.3-p173) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="binding_of_caller (v0.7.2, ruby-2.2.3-p173) [gem]" level="application" />
@@ -37,7 +38,7 @@
     <orderEntry type="library" scope="PROVIDED" name="byebug (v8.2.4, ruby-2.2.3-p173) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="coffee-rails (v4.1.1, ruby-2.2.3-p173) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="coffee-script (v2.4.1, ruby-2.2.3-p173) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="coffee-script-source (v1.10.0, ruby-2.2.3-p173) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="coffee-script-source (v1.8.0, ruby-2.2.3-p173) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="commonjs (v0.2.7, ruby-2.2.3-p173) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="concurrent-ruby (v1.0.1, ruby-2.2.3-p173) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="debug_inspector (v0.0.2, ruby-2.2.3-p173) [gem]" level="application" />
@@ -66,6 +67,7 @@
     <orderEntry type="library" scope="PROVIDED" name="rails-deprecated_sanitizer (v1.0.3, ruby-2.2.3-p173) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="rails-dom-testing (v1.0.7, ruby-2.2.3-p173) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="rails-html-sanitizer (v1.0.3, ruby-2.2.3-p173) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="rails-observers (v0.1.2, ruby-2.2.3-p173) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="railties (v4.2.6, ruby-2.2.3-p173) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="rake (v11.1.2, ruby-2.2.3-p173) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="rdoc (v4.2.2, ruby-2.2.3-p173) [gem]" level="application" />

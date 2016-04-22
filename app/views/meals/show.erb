@@ -1,0 +1,38 @@
+<div class="btn-group btn-group-justified">
+  <%= link_to raw('<i class="fa fa-chevron-left"></i> Back'), meals_path, :class => 'btn btn-lg btn-default' %>
+</div>
+
+<div class="margin-top">
+  <h4>Name:</h4>
+  <p><%= @meal.name %></p>
+
+  <h4><span class="fa fa-map-marker"></span> Location:</h4>
+  <p><%= @meal.location %></p>
+
+  <h4><span class="fa fa-calendar"></span> Date:</h4>
+  <p><%= @meal.date %></p>
+
+
+  <h4 class="margin-top">
+    <span class="fa fa-user"></span> Orders:
+  </h4>
+  <p><%= @meal.ordersCount %></p>
+
+  <div class="well order-form">
+    <%= render 'orders/form' %>
+  </div>
+
+  <% if @meal.ordersCount > 0 %>
+    <%= render @meal.orders %>
+  <% end %>
+
+
+  <div class="margin-top btn-group btn-group-justified">
+    <%= link_to 'Destroy', meal_path(@meal),
+                method: :delete,
+                data: { confirm: 'Are you sure?' },
+                :class => 'btn btn-lg btn-danger' %>
+    <%= link_to 'Edit', edit_meal_path(@meal),
+                :class => 'btn btn-lg btn-default' %>
+  </div>
+</div>

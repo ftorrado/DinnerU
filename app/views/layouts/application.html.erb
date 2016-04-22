@@ -1,14 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Dinneru</title>
-  <%= stylesheet_link_tag    'default', media: 'all', 'data-turbolinks-track' => true %>
-  <%= javascript_include_tag 'default', 'data-turbolinks-track' => true %>
+  <title>DinnerU</title>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
 </head>
 <body>
 
-<%= yield %>
+<div class="container">
+  <div class="page-header text-center">
+    <h1><%= link_to 'DinnerU', root_path %></h1>
+  </div>
+
+  <%= yield %>
+</div>
 
 </body>
 </html>

@@ -32,16 +32,13 @@ var SearchHelper = function($input, $searchHelperBox, $focusOnSelect, options) {
     this.$input = $input;
     this.$searchHelperBox = $searchHelperBox;
     this.$focusOnSelect = $focusOnSelect;
-    if (typeof options.$destination != "undefined" && isDomElemJQuery(options.$destination))
+
+    this.options = SearchHelper.getDefaultOptions();
+    if (isset(options) && isDomElemJQuery(options.$destination))
         this.$destination = options.$destination;
     else
         this.$destination = $input;
-    this.options = SearchHelper.getDefaultOptions($input);
-
-    if (typeof options.$destination != "undefined" && isDomElemJQuery(options.$destination)) {
-        this.options.$destination = options.$destination;
-    }
-    if (options.ajaxRequestMode != "undefined" && options.ajaxRequestMode != null) {
+    if (isset(options) && isset(options.ajaxRequestMode)) {
         if (options.ajaxRequestMode == "text/plain" || options.ajaxRequestMode == "plain")
             this.options.ajaxMode = "plain";
         else if (options.ajaxRequestMode == "json")
@@ -49,7 +46,8 @@ var SearchHelper = function($input, $searchHelperBox, $focusOnSelect, options) {
         else if (options.ajaxRequestMode == "urlencoded" || options.ajaxRequestMode == "default")
             this.options.ajaxMode = 'default'
     }
-    if (options.multipleSelect instanceof bool) {
+    if (isset(options) && isset(options.multipleSelect) &&
+            options.multipleSelect instanceof bool) {
         this.options.multipleSelect = options.multipleSelect;
     }
 
@@ -176,8 +174,7 @@ SearchHelper.prototype.refresh = function() {
             helperObj.queryShowing = queryToSearch;
         })
         .fail(function(error, textStatus, jqXHR) {
-            toastr.error(messages.fail.request + ': ' + textStatus);
-            //console.error(messages.fail.request + ': ' + textStatus+ "\n" + error);
+            console.error('Request failed: ' + textStatus+ "\n" + error);
         });
 };
 

@@ -1,7 +1,11 @@
 Rails.application.routes.draw do
-  resources :meals
+  resources :meals do
+    resources :orders
+  end
 
   root 'meals#index'
+  match '/orders/list/names', to: 'orders#list_names', via: 'post'
+  match '/orders/list/dishes', to: 'orders#list_dishes', via: 'post'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

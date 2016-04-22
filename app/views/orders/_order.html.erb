@@ -1,0 +1,16 @@
+<ul>
+  <li>Name: <%= order.name %></li>
+  <li class="small">Dish: <%= order.dish %></li>
+  <% if order.comment != nil %>
+    <li class="small">Comment: <%= order.comment %></li>
+  <% end %>
+  <li>
+    <ul>
+      <li>
+        <%= link_to 'Destroy', [order.meal, order],
+                    method: :delete,
+                    data: { confirm: 'Are you sure?' } %>
+      </li>
+    </ul>
+  </li>
+</ul>

@@ -1,50 +1,49 @@
 class MealsController < ApplicationController
   def index
-    @articles = Article.all
+    @meals = Meal.all
   end
 
   def show
-    @article = Article.find(params[:id])
+    @meal = Meal.find(params[:id])
   end
 
   def new
-    @article = Article.new
+    @meal = Meal.new
   end
 
   def edit
-    @article = Article.find(params[:id])
+    @meal = Meal.find(params[:id])
   end
 
   def create
-    @article = Article.new(article_params)
+    @meal = Meal.new(meal_params)
 
-    if @article.save
-      redirect_to @article
+    if @meal.save
+      redirect_to @meal
     else
       render 'new'
     end
-    #render plain: params[:article].inspect
   end
 
   def update
-    @article = Article.find(params[:id])
+    @meal = Meal.find(params[:id])
 
-    if @article.update(article_params)
-      redirect_to @article
+    if @meal.update(meal_params)
+      redirect_to @meal
     else
       render 'edit'
     end
   end
 
   def destroy
-    @article = Article.find(params[:id])
-    @article.destroy
+    @meal = Meal.find(params[:id])
+    @meal.destroy
 
-    redirect_to articles_path
+    redirect_to meals_path
   end
 
   private
   def meal_params
-    params.require(:meal).permit(:name, :restaurant, :)
+    params.require(:meal).permit(:name, :location, :date)
   end
 end

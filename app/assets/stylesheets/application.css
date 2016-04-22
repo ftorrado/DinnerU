@@ -10,6 +10,26 @@
  * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
  * file per style scope.
  *
+ *= require bootstrap_and_overrides
  *= require_tree .
  *= require_self
  */
+
+#error_explanation {
+    background-color: palegoldenrod;
+    padding: 0.5em 2em;
+}
+
+table.meal-list-item {
+    width: 100%;
+    border: solid 1px #bbb;
+}
+table.meal-list-item th, table.meal-list-item td {
+    padding: 0.5em;
+    vertical-align: baseline;
+    border-left: solid 1px #bbb;
+}
+
+.margin-top{
+    margin-top: 1em;
+}

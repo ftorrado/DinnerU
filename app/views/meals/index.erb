@@ -1,0 +1,36 @@
+<div class="btn-group btn-group-justified">
+  <%= link_to raw('<i class="fa fa-plus"></i> New'), new_meal_path, :class => 'btn btn-lg btn-default' %>
+</div>
+
+<div class="well text-center margin-top">
+  <% if @meals.size <= 0 %>
+    List is still empty
+  <% end %>
+  <% @meals.each do |meal| %>
+      <table class="meal-list-item">
+        <tr>
+          <td>
+            <h3><%= link_to meal.name, meal_path(meal)%></h3>
+          </td>
+          <td class="text-center">
+            <span class="fa fa-calendar"></span>
+          </td>
+          <td class="text-center">
+            <span class="fa fa-user"></span>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span class="fa fa-map-marker"></span>
+            <%= meal.location %>
+          </td>
+          <td>
+            <%= meal.date %>
+          </td>
+          <td>
+            <%= meal.ordersCount %>
+          </td>
+        </tr>
+      </table>
+  <% end %>
+</div>
