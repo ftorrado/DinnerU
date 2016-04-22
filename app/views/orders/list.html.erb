@@ -1,23 +1,15 @@
 <div>
-  <% if @orders.blank? %>
+  <% if @list.blank? %>
     No results found
   <% end %>
-  <% @orders.each do |order| %>
-      <ul class="list-group">
-        <repeat group="{{ @families }}" value="@family">
-          <a href="" class="element list-group-item">
-						<span>
-							<img src="{{ $family->getFamilyPictureSrc() }}" alt="Pic" width="48" height="48" />
-							<span class="username">{{ @family.members[0].name }}</span>
-							<span class="familyname">{{ @family.name }}</span>
-							<span class="hidden helper-value">{{ @family._id }}</span>
-						</span>
-          </a>
-        </repeat>
-      </ul>
-    </true>
-    <false>
-      <p>Não foram encontrados resultados para a pesquisa</p>
-    </false>
-  </check>
+  <ul class="list-group">
+    <% @list.each do |elem| %>
+      <a href="" class="element list-group-item">
+        <span>
+          <span><%= elem %></span>
+          <span class="hidden helper-value"><%= elem %></span>
+        </span>
+      </a>
+    <% end %>
+  </ul>
 </div>

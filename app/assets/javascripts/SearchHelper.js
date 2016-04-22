@@ -133,7 +133,7 @@ var SearchHelper = function($input, $searchHelperBox, $focusOnSelect, options) {
         }
     });
     this.$destination.on('input', function(evt) {
-        if(!helperObj.$input.val() || trim(helperObj.$input.val()) == "") {
+        if(!helperObj.$input.val() || $.trim(helperObj.$input.val()) == "") {
             helperObj.clearSelections();
         }
     });

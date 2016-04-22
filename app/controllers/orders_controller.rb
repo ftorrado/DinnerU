@@ -1,18 +1,23 @@
 class OrdersController < ApplicationController
   def list_names
     @orders = Order.where(name: params[:query])
-    render 'list'
+    @list = Array.new
+    @orders.each do |order|
+      @list.push order.name
+    end
+    render 'list', layout: false
   end
   def list_dishes
     @orders = Order.where(dish: params[:query])
-    render 'list'
+    @list = Array.new
+    @orders.each do |order|
+      @list.push order.dish
+    end
+    render 'list', layout: false
   end
 
   def create
     @meal = Meal.find(params[:meal_id])
-    if @meal.orders.where(name: :order.name).count > 0
-
-    end
     @order = @meal.orders.create(order_params)
     redirect_to meal_path(@meal)
   end
