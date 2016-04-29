@@ -1,4 +1,4 @@
-#
+# Data model for orders placed on meals
 class Order
   include Mongoid::Document
 
@@ -13,11 +13,7 @@ class Order
   index({ name: 1 }, unique: true)
 
   def list_names
-    query = /.*#{Regexp.escape(params[:query])}.*/i
-    orders = Order.collection.aggregate(
-      [{ '$match' => { 'name' => { '$regex' => query } } },
-       { '$group' => { '_id' => { 'result' => '$name' } } }
-      ])
+    orders = query_string_anywhere(params[:query], 'name')
     list = []
     orders.each do |order|
       list.push order['_id']['result']
@@ -25,14 +21,20 @@ class Order
   end
 
   def list_dishes
-    query = /.*#{Regexp.escape(params[:query])}.*/i
-    orders = Order.collection.aggregate(
-      [{ '$match' => { 'dish' => { '$regex' => query } } },
-       { '$group' => { '_id' => { 'result' => '$dish' } } }
-      ])
+    orders = query_string_anywhere(params[:query], 'dish')
     list = []
     orders.each do |order|
       list.push order['_id']['result']
     end
+  end
+
+  private
+
+  def query_string_anywhere(value, field_name)
+    query = /.*#{Regexp.escape(value)}.*/i
+    Order.collection.aggregate(
+      [{ '$match' => { field_name => { '$regex' => query } } },
+       { '$group' => { '_id' => { 'result' => "$#{field_name}" } } }
+      ])
   end
 end

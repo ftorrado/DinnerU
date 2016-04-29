@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <title>SearchHelper.js</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="../../../../css/reset.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="../../../../css/main.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="../../../../css/github.css" type="text/css" media="screen" />
+<script src="../../../../js/jquery-1.3.2.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../../../js/jquery-effect.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../../../js/main.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../../../js/highlight.pack.js" type="text/javascript" charset="utf-8"></script>
+
+</head>
+
+<body>     
+    <div class="banner">
+        
+        <h1>
+            SearchHelper.js
+        </h1>
+        <ul class="files">
+            <li>app/assets/javascripts/SearchHelper.js</li>
+            <li>Last modified: 2016-04-22 13:29:41 +0100</li>
+        </ul>
+    </div>
+
+    <div id="bodyContent">
+        <div id="content">
+  
+    <div class="description">
+      
+<pre><code>Search helper to give auto-complete to form inputs
+&lt;p&gt;
+    Available options:
+     $destination - null - where to place selected values
+     ajaxRequestMode - &quot;plain&quot; - &quot;plain&quot;/&quot;json&quot;/&quot;default&quot;
+     multipleSelect - false - if selection is for one or multiple items
+&lt;p&gt;
+    Usage example:
+    &lt;code&gt;
+       userSearchHelper = new SearchHelper(
+         $(&#39;.room-chat-input input[name=&quot;username&quot;]&#39;),
+         $(&#39;.room-chat-helper&#39;), 
+         $(&#39;.room-chat-input input[name=&quot;message&quot;]&#39;)
+       );
+    &lt;/code&gt;
+
+@author Filipe R. O. Torrado
+Created at: 14-12-2015</code></pre>
+
+<p>/**</p>
+
+<pre><code> Use a form input and a container box as search helper to that input
+
+ @param $input
+ @param $searchHelperBox (need attribute &quot;data-source&quot;, with url to get search)
+ @param $focusOnSelect (optional)
+ @param options
+ @constructor
+/</code></pre>
+
+<p>var SearchHelper = function($input, $searchHelperBox, $focusOnSelect,
+options) {</p>
+
+<pre><code>this.$input = $input;
+this.$searchHelperBox = $searchHelperBox;
+this.$focusOnSelect = $focusOnSelect;
+
+this.options = SearchHelper.getDefaultOptions();
+if (isset(options) &amp;&amp; isDomElemJQuery(options.$destination))
+    this.$destination = options.$destination;
+else
+    this.$destination = $input;
+if (isset(options) &amp;&amp; isset(options.ajaxRequestMode)) {
+    if (options.ajaxRequestMode == &quot;text/plain&quot; || options.ajaxRequestMode == &quot;plain&quot;)
+        this.options.ajaxMode = &quot;plain&quot;;
+    else if (options.ajaxRequestMode == &quot;json&quot;)
+        this.options.ajaxMode = &quot;json&quot;;
+    else if (options.ajaxRequestMode == &quot;urlencoded&quot; || options.ajaxRequestMode == &quot;default&quot;)
+        this.options.ajaxMode = &#39;default&#39;
+}
+if (isset(options) &amp;&amp; isset(options.multipleSelect) &amp;&amp;
+        options.multipleSelect instanceof bool) {
+    this.options.multipleSelect = options.multipleSelect;
+}
+
+this.searchUrl = $searchHelperBox.attr(&quot;data-source&quot;);
+this.isOpen = false;
+this.queryShowing = null;
+this.closingTimer = null;
+
+this.refresh();
+
+var helperObj = this;
+$input.focus(function() {
+    helperObj.open();
+});
+
+var blurFunction = function() {
+    helperObj.closingTimer = setTimeout(function() {
+        helperObj.close();
+    }, 500);
+};
+$input.blur(blurFunction);
+$searchHelperBox.blur(blurFunction);
+var focusFunction = function() {
+    if (helperObj.closingTimer == null)
+        return;
+    clearTimeout(helperObj.closingTimer);
+    helperObj.closingTimer = null;
+};
+$input.focus(focusFunction);
+$searchHelperBox.focus(focusFunction);
+
+$input.keydown(function(evt) {
+    if (evt.keyCode == 13) {
+        evt.preventDefault();
+    }
+});
+$input.keyup(function(evt) {
+    if (evt.keyCode == 13 || evt.keyCode == 9) {
+        // Enter/Tab - go write message
+        var $selected = helperObj.$searchHelperBox.find(&quot;.element.active&quot;);
+        if ($selected.length &gt; 0)
+            $(this).val($selected.find(&quot;span.helper-value&quot;).text());
+        helperObj.close();
+        if (helperObj.$focusOnSelect != null &amp;&amp; typeof helperObj.$focusOnSelect !== &quot;undefined&quot;)
+            helperObj.$focusOnSelect.focus();
+    }
+    else if (evt.keyCode != 38 &amp;&amp; evt.keyCode != 40) {
+        helperObj.refresh();
+    }
+    else {
+        // Up/Down
+        evt.preventDefault();
+        var $elements = helperObj.$searchHelperBox.find(&#39;.element&#39;);
+        if ($elements.length &lt; 1) {
+            console.log(&quot;No elements on search helper&quot;);
+        }
+        else {
+            var num = helperObj.$searchHelperBox.find(&#39;.element.active&#39;).index();
+            if (num == null || num &lt; 0) {
+                $($elements.get(0)).addClass(&quot;active&quot;);
+                helperObj.$destination.val($($elements.get(0)).find(&quot;span.helper-value&quot;).text());
+            }
+            else if (num &gt;= $elements.size()) {
+                console.error(&quot;searchHelper: active index is out of bounds&quot;);
+            }
+            else {
+                if (evt.keyCode == 38) {
+                    if (num &gt; 0) {
+                        $($elements.get(num)).removeClass(&#39;active&#39;);
+                        $($elements.get(num - 1)).addClass(&quot;active&quot;);
+                        helperObj.$destination.val($($elements.get(num - 1)).find(&quot;span.helper-value&quot;).text());
+                    }
+                }
+                else if (evt.keyCode == 40) {
+                    if (num &lt; $elements.length - 1) {
+                        $($elements.get(num)).removeClass(&#39;active&#39;);
+                        $($elements.get(num + 1)).addClass(&quot;active&quot;);
+                        helperObj.$destination.val($($elements.get(num + 1)).find(&quot;span.helper-value&quot;).text());
+                    }
+                }
+            }
+        }
+    }
+});
+this.$destination.on(&#39;input&#39;, function(evt) {
+    if(!helperObj.$input.val() || $.trim(helperObj.$input.val()) == &quot;&quot;) {
+        helperObj.clearSelections();
+    }
+});</code></pre>
+
+<p>};</p>
+
+<p>SearchHelper.getDefaultOptions = function() {</p>
+
+<pre><code>return {
+    ajaxRequestMode: &quot;plain&quot;,
+    multipleSelect: false,
+    selectOnLoad: true
+};
+</code></pre>
+
+<p>};</p>
+
+<p>SearchHelper.prototype.refresh = function() {</p>
+
+<pre><code>var queryToSearch = this.$input.val();
+if (this.queryShowing != null &amp;&amp; queryToSearch === this.queryShowing)
+    return;
+var helperObj = this;
+var ajaxOptions = {
+    type: &quot;post&quot;,
+    url: this.searchUrl,
+    dataType: &quot;html&quot;
+};
+if (this.options.ajaxMode == &quot;json&quot;) {
+    ajaxOptions.contentType =&quot;application/json&quot;;
+    ajaxOptions.data = JSON.stringify({ query: queryToSearch });
+}
+else if (this.options.ajaxMode == &quot;plain&quot;) {
+    ajaxOptions.contentType =&quot;text/plain&quot;;
+    ajaxOptions.data = queryToSearch;
+}
+else {
+    ajaxOptions.data = {query: queryToSearch};
+}
+$.ajax(ajaxOptions)
+    .done(function(data) {
+        helperObj.loadWith(data);
+        helperObj.queryShowing = queryToSearch;
+    })
+    .fail(function(error, textStatus, jqXHR) {
+        console.error(&#39;Request failed: &#39; + textStatus+ &quot;\n&quot; + error);
+    });</code></pre>
+
+<p>};</p>
+
+<p>SearchHelper.prototype.loadWith = function(pageHtml) {</p>
+
+<pre><code>this.$searchHelperBox.html(pageHtml);
+var $elements = this.$searchHelperBox.find(&#39;.element&#39;);
+if (this.options.selectOnLoad) {
+    var $firstElement = this.$searchHelperBox.find(&#39;.element:first-child&#39;);
+    $firstElement.addClass(&quot;active&quot;);
+}
+var helperObj = this;
+$elements.click(function(evt) {
+    evt.preventDefault();
+    $(this).addClass(&quot;active&quot;);
+    helperObj.selectValue($(this).find(&quot;span.helper-value&quot;).text());
+    if (! helperObj.options.multipleSelect) {
+        $elements.removeClass(&quot;active&quot;);
+        helperObj.close();
+    }
+    helperObj.$focusOnSelect.focus();
+});</code></pre>
+
+<p>};</p>
+
+<p>SearchHelper.prototype.open = function() {</p>
+
+<pre><code>this.$searchHelperBox.removeClass(&quot;hidden&quot;);
+this.isOpen = true;</code></pre>
+
+<p>}; SearchHelper.prototype.close = function() {</p>
+
+<pre><code>this.$searchHelperBox.addClass(&quot;hidden&quot;);
+this.isOpen = false;</code></pre>
+
+<p>}; SearchHelper.prototype.toggle = function() {</p>
+
+<pre><code>if(this.isOpen)
+    this.close();
+else
+    this.open();</code></pre>
+
+<p>};</p>
+
+<p>SearchHelper.prototype.selectAll = function() {</p>
+
+<pre><code>if (this.options.multipleSelect)
+    return false;
+var helperObj = this;
+var $elements = helperObj.$searchHelperBox.find(&#39;.element&#39;);
+$.each($elements, function(i, element) {
+    var $element = $(element);
+    $element.addClass(&quot;active&quot;);
+    helperObj.selectValue($element.find(&quot;span.helper-value&quot;).text());
+});
+helperObj.close();
+helperObj.$focusOnSelect.focus();</code></pre>
+
+<p>}; SearchHelper.prototype.selectValue = function(value) {</p>
+
+<pre><code>if(this.$destination.val() == &quot;&quot; || !this.options.multipleSelect)
+    this.$destination.val(value);
+else
+    this.$destination.val(this.$destination.val() + &quot;,&quot; + value);</code></pre>
+
+<p>};</p>
+
+<p>SearchHelper.prototype.clearAll = function() {</p>
+
+<pre><code>this.$destination.val(&quot;&quot;);
+this.clearSelections();</code></pre>
+
+<p>}; SearchHelper.prototype.clearSelections = function() {</p>
+
+<pre><code>var $elements = this.$searchHelperBox.find(&#39;.element&#39;);
+$elements.removeClass(&quot;active&quot;);</code></pre>
+
+<p>};</p>
+
+    </div>
+  
+
+
+  
+
+
+  
+  
+
+
+  
+
+
+  
+
+  
+
+
+
+  
+
+    
+
+    
+
+    
+
+
+    
+
+
+    <!-- Methods -->
+              </div>
+
+    </div>
+  </body>
+</html>

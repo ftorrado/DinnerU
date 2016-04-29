@@ -11,4 +11,4 @@ last-supper:
 get-together:
   name: 'Weekly get together!'
   location: 'At Thomas place'
-  date: '2016/05/24 19:00:00.00'
+  date: '2016-05-24 19:00:00.00'

@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <title>utils.js</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="../../../../css/reset.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="../../../../css/main.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="../../../../css/github.css" type="text/css" media="screen" />
+<script src="../../../../js/jquery-1.3.2.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../../../js/jquery-effect.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../../../js/main.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../../../js/highlight.pack.js" type="text/javascript" charset="utf-8"></script>
+
+</head>
+
+<body>     
+    <div class="banner">
+        
+        <h1>
+            utils.js
+        </h1>
+        <ul class="files">
+            <li>app/assets/javascripts/utils.js</li>
+            <li>Last modified: 2016-04-21 21:08:38 +0100</li>
+        </ul>
+    </div>
+
+    <div id="bodyContent">
+        <div id="content">
+  
+    <div class="description">
+      
+<pre><code>Javascript with multiple utilitarian functions
+
+@author Filipe R. O. Torrado
+Created at: 12-11-2014</code></pre>
+
+<p>// AJAX utils function setupFormAsync ($form, onSuccess, onFail,
+beforeSubmit, beforeSubmitData){</p>
+
+<pre><code>$form.submit(function(e){
+    e.preventDefault();
+    var $submitter = $(this);
+    var target = $(this).attr(&quot;action&quot;);
+    console.log(&quot;Async form submit: &quot; + $submitter.serialize() + &quot; into &quot; + target);
+
+    if (typeof beforeSubmit !== &quot;undefined&quot; &amp;&amp; !!(beforeSubmit &amp;&amp;
+        beforeSubmit.constructor &amp;&amp; beforeSubmit.call &amp;&amp; beforeSubmit.apply)) {
+        if(! beforeSubmit(beforeSubmitData)) {
+            console.log(&quot;Pre-condition for async form has failed...&quot;);
+            return;
+        }
+    }
+
+    $.ajax({
+        url: target,
+        type: &quot;post&quot;,
+        contentType: &quot;application/x-www-form-urlencoded;charset=utf-8&quot;,
+        dataType: &quot;json&quot;,
+        data: $submitter.serialize(),
+        success: function(data, textStatus, jqXHR) {
+            console.log(&quot;Success on submit! -&gt; &quot;, data);
+            if (typeof data === &quot;string&quot;)
+                data = {msg: data};
+            onSuccess(data, textStatus, jqXHR);
+        },
+        error: function(jqXHR, textStatus, error) {
+            console.log(&quot;Error on submit! -&gt; &quot;, jqXHR);
+            if (typeof jqXHR.responseJSON !== &quot;undefined&quot; &amp;&amp; typeof jqXHR.responseJSON.msg !== &quot;undefined&quot;)
+                var data = jqXHR.responseJSON;
+            else if (typeof jqXHR.responseText === &quot;undefined&quot;)
+                var data = {msg: &quot;Erro a submeter o formulário&quot;};
+            else {
+                try {
+                    var data = JSON.parse(jqXHR.responseText);
+                    if (typeof data.msg === &quot;undefined&quot;)
+                        data.msg = &quot;Erro a submeter o formulário&quot;;
+                }
+                catch (err) {
+                    var data = {msg: jqXHR.responseText};
+                }
+            }
+            onFail(data, textStatus, jqXHR);
+        }
+    });
+});</code></pre>
+
+<p>}</p>
+
+<p>function scriptRunner (elementId) {</p>
+
+<pre><code>//var arr = document.getElementById(&#39;sidebar-panel&#39;).getElementsByTagName(&#39;script&#39;);
+var arr = document.getElementById(elementId).getElementsByTagName(&#39;script&#39;);
+console.log(&quot;Running &quot; + arr.length + &quot; scripts from #&quot; + elementId);
+for (var n = 0; n &lt; arr.length; n++) {
+    eval(arr[n].innerHTML);
+}</code></pre>
+
+<p>}</p>
+
+<p>// Utils</p>
+
+<p>/**</p>
+
+<pre><code> Checks if given object is a DOM element
+ @see http://stackoverflow.com/a/28287642
+/</code></pre>
+
+<p>function isDomElem(obj) {</p>
+
+<pre><code>if(obj instanceof HTMLCollection &amp;&amp; obj.length) {
+    for(var a = 0, len = obj.length; a &lt; len; a++) {
+        if(!checkInstance(obj[a])) {
+            console.log(a);
+            return false;
+        }
+    }
+    return true;
+} else {
+    return checkInstance(obj);
+}
+
+function checkInstance(elem) {
+    if(isDomElemJQuery(elem) || elem instanceof HTMLElement) {
+        return true;
+    }
+    return false;
+}</code></pre>
+
+<p>}</p>
+
+<p>function isDomElemJQuery(elem) {</p>
+
+<pre><code>return (elem instanceof jQuery &amp;&amp; elem.length);
+</code></pre>
+
+<p>}</p>
+
+<p>/**</p>
+
+<pre><code> Checks if variable is defined and not null
+/</code></pre>
+
+<p>function isset(arg) {</p>
+
+<pre><code>return (typeof arg !== &#39;undefined&#39; &amp;&amp; arg != null);</code></pre>
+
+<p>}</p>
+
+<p>/**</p>
+
+<pre><code> Set default value if variable has no value
+ @see: http://stackoverflow.com/questions/894860/set-a-default-parameter-value-for-a-javascript-function
+/</code></pre>
+
+<p>function defaultFor (arg, val) {</p>
+
+<pre><code>return (!isset(arg)) ? arg : val;
+</code></pre>
+
+<p>}</p>
+
+<p>/**</p>
+
+<pre><code> Gets the content of the cookie with the given name
+/</code></pre>
+
+<p>function getCookie(cname) {</p>
+
+<pre><code>var name = cname + &quot;=&quot;;
+var ca = document.cookie.split(&#39;;&#39;);
+for(var i=0; i&lt;ca.length; i++) {
+    var c = ca[i];
+    while (c.charAt(0)==&#39; &#39;) c = c.substring(1);
+    if (c.indexOf(name) != -1) return c.substring(name.length,c.length);
+}
+return &quot;&quot;;</code></pre>
+
+<p>}</p>
+
+<p>/**</p>
+
+<pre><code> Convert to hexadecimal
+/</code></pre>
+
+<p>function componentToHex© {</p>
+
+<pre><code>var hex = c.toString(16);
+return hex.length == 1 ? &quot;0&quot; + hex : hex;
+</code></pre>
+
+<p>} /**</p>
+
+<pre><code> convert color to hexadecimal format
+/</code></pre>
+
+<p>function rgbToHex(opacity, r, g, b) {</p>
+
+<pre><code>if(opacity != null)
+    return &quot;#&quot; + componentToHex(opacity) + componentToHex(r) + componentToHex(g) + componentToHex(b);
+else
+    return &quot;#&quot; + componentToHex(r) + componentToHex(g) + componentToHex(b);</code></pre>
+
+<p>}</p>
+
+<p>// By Tim Down: <a
+href="http://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb">stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb</a>
+// accepts formats #03F and #0033FF function hexToRgb(hex) {</p>
+
+<pre><code>// Expand shorthand form (e.g. &quot;03F&quot;) to full form (e.g. &quot;0033FF&quot;)
+var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+hex = hex.replace(shorthandRegex, function(m, r, g, b) {
+    return r + r + g + g + b + b;
+});
+
+var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+return result ? {
+    r: parseInt(result[1], 16),
+    g: parseInt(result[2], 16),
+    b: parseInt(result[3], 16)
+} : null;</code></pre>
+
+<p>}</p>
+
+    </div>
+  
+
+
+  
+
+
+  
+  
+
+
+  
+
+
+  
+
+  
+
+
+
+  
+
+    
+
+    
+
+    
+
+
+    
+
+
+    <!-- Methods -->
+              </div>
+
+    </div>
+  </body>
+</html>

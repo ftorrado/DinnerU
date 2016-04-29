@@ -1,3 +1,5 @@
+# Controller class for showing and managing +meals+. +index+ is the
+# web application +root+
 class MealsController < ApplicationController
   def index
     @meals = Meal.all
