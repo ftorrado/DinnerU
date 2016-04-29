@@ -4,7 +4,11 @@
 # model remove the '{}' from the fixture names and add the columns immediately
 # below each fixture, per the syntax in the comments below
 #
-one: {}
+last-supper:
+  name: 'The last supper'
+  location: 'Stairway to heaven'
 
-two: {}
-
+get-together:
+  name: 'Weekly get together!'
+  location: 'At Thomas place'
+  date: '2016/05/24 19:00:00.00'

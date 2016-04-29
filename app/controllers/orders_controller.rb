@@ -1,28 +1,12 @@
+# Controller class for the orders
 class OrdersController < ApplicationController
   def list_names
-    @query = /.*#{Regexp.escape(params[:query])}.*/i
-    stages = [
-        {"$match"=> {"name" => {"$regex" => @query}}},
-        {"$group"=> { "_id" => {"result" => "$name"}}}
-    ]
-    @orders = Order.collection.aggregate(stages)
-    @list = Array.new
-    @orders.each do |order|
-      @list.push order['_id']['result']
-    end
+    @list = Order.list_names
     render 'list', layout: false
   end
+
   def list_dishes
-    @query = /.*#{Regexp.escape(params[:query])}.*/i
-    stages = [
-        {"$match"=> {"dish" => {"$regex" => @query}}},
-        {"$group"=> { "_id" => {"result" => "$dish"}}}
-    ]
-    @orders = Order.collection.aggregate(stages)
-    @list = Array.new
-    @orders.each do |order|
-      @list.push order['_id']['result']
-    end
+    @list = Order.list_dishes
     render 'list', layout: false
   end
 
@@ -40,6 +24,7 @@ class OrdersController < ApplicationController
   end
 
   private
+
   def order_params
     params.require(:order).permit(:name, :dish, :comment)
   end
