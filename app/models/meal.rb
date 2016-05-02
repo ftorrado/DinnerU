@@ -3,17 +3,27 @@
 class Meal
   include Mongoid::Document
 
-  has_many :orders, dependent: :destroy
-
-  def orders_count
-    orders.size
-  end
+  embeds_many :orders_containers
+  has_many :comments
+  belongs_to :user
 
   field :name, type: String
+  field :description, type: String
   field :location, type: String
-  field :date, type: String
-  # field :pass, type: String, default: ->{Random.new().rand(0x10000).to_s(16)}
+  field :date, type: DateTime
+  field :orders_users_count, type: Integer, default: 0
+  field :visible, type: Boolean, default: false
+  field :private, type: Boolean, default: false
 
   validates :name, presence: true, length: { minimum: 5 }
-  index({ name: 1 }, unique: true)
+  index({ name: 1 }, {unique: true})
+
+
+  scope :publicly_visible, lambda {
+    where(visible: true)
+  }
+
+  scope :privately_visible_by, lambda { |user|
+    where(user_id: user.id, visible: false)
+  }
 end

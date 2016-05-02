@@ -9,60 +9,63 @@
  * compiled file so the styles you add here take precedence over styles defined in any styles
  * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
  * file per style scope.
- *
- *= require bootstrap_and_overrides
- *= require_tree .
- *= require_self
  */
+// "bootstrap-sprockets" must be imported before "bootstrap" and "bootstrap/variables"
+@import "bootstrap-sprockets";
+@import "bootstrap";
 
 #error_explanation {
-    background-color: palegoldenrod;
-    padding: 0.5em 2em;
+  background-color: palegoldenrod;
+  padding: 0.5em 2em;
 }
 
 table.meal-list-item {
-    width: 100%;
-    border: solid 1px #bbb;
+  width: 100%;
+  border: solid 1px #bbb;
 }
+
 table.meal-list-item th, table.meal-list-item td {
-    padding: 0.5em;
-    vertical-align: baseline;
-    border-left: solid 1px #bbb;
+  padding: 0.5em;
+  vertical-align: baseline;
+  border-left: solid 1px #bbb;
 }
+
 table.meal-list-item tr:nth-child(even) {
-    border-bottom: solid 1px #bbb;
+  border-bottom: solid 1px #bbb;
 }
 
 .input {
-    margin-bottom: 1em;
+  margin-bottom: 1em;
 }
 
 /* search helper */
 .search-helper {
-    position: relative;
-    width: 100%;
-    height: 0;
+  position: relative;
+  width: 100%;
+  height: 0;
 }
+
 .search-helper > div {
-    position: relative;
-    top: 0;
-    width: 100%;
-    min-height: 4em;
-    max-height: 35vh;
-    z-index: 10;
-    background-color: #f4f4f4;
-    border: #eaeaea 1px solid;
-    transition: height 0.5s ease;
-    padding-top: 0;
+  position: relative;
+  top: 0;
+  width: 100%;
+  min-height: 4em;
+  max-height: 35vh;
+  z-index: 10;
+  background-color: #f4f4f4;
+  border: #eaeaea 1px solid;
+  transition: height 0.5s ease;
+  padding-top: 0;
 }
+
 .search-helper.hidden > div {
-    max-height: 20px;
+  max-height: 20px;
 }
 
 .search-helper ul.list-group {
-    margin-bottom: 0;
+  margin-bottom: 0;
 }
 
-.margin-top{
-    margin-top: 1em;
+.margin-top {
+  margin-top: 1em;
 }

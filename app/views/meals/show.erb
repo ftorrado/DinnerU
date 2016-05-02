@@ -16,7 +16,7 @@
   <h4 class="margin-top">
     <span class="fa fa-user"></span> Orders:
   </h4>
-  <p><%= @meal.ordersCount %></p>
+  <p><%= @meal.orders.count %></p>
 
   <div class="well order-form">
     <%= render 'orders/form' %>

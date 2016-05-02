@@ -2,7 +2,7 @@
 # web application +root+
 class MealsController < ApplicationController
   def index
-    @meals = Meal.all
+    @meals = Meal.all.publicly_visible
   end
 
   def show
