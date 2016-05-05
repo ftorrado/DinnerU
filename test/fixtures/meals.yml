@@ -1,14 +1,20 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
-# This model initially had no columns defined.  If you add columns to the
-# model remove the '{}' from the fixture names and add the columns immediately
-# below each fixture, per the syntax in the comments below
+## Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 #
-last-supper:
-  name: 'The last supper'
-  location: 'Stairway to heaven'
-
-get-together:
-  name: 'Weekly get together!'
-  location: 'At Thomas place'
-  date: '2016-05-24 19:00:00.00'
+## This model initially had no columns defined.  If you add columns to the
+## model remove the '{}' from the fixture names and add the columns immediately
+## below each fixture, per the syntax in the comments below
+##
+#last-supper:
+#  name: 'The last supper'
+#  location: 'Stairway to heaven'
+#  orders_users_count: 12
+#  visible: true
+#  private: false
+#
+#get-together:
+#  name: 'Weekly get together!'
+#  location: 'At Thomas place'
+#  orders_users_count: 3
+#  visible: false
+#  private: false
+#  #date: '2016-05-24 19:00:00.00'

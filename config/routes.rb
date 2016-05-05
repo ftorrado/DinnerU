@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'users/new'
+
   devise_for :users
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
   resources :meals do

@@ -4,7 +4,7 @@ class Meal
   include Mongoid::Document
 
   embeds_many :orders_containers
-  has_many :comments
+  embeds_many :comments
   belongs_to :user
 
   field :name, type: String
@@ -16,7 +16,6 @@ class Meal
   field :private, type: Boolean, default: false
 
   validates :name, presence: true, length: { minimum: 5 }
-  index({ name: 1 }, {unique: true})
 
 
   scope :publicly_visible, lambda {

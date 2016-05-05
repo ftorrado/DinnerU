@@ -1,6 +1,13 @@
 require 'test_helper'
 
 class MealsControllerTest < ActionController::TestCase
+  def setup
+    @meal = Meal.new(name: 'The last supper',
+                     location: 'Stairway to heaven',
+                     orders_users_count: 12,
+                     visible: true, private: false)
+  end
+
   test 'should get index' do
     get :index
     assert_response :success
@@ -8,7 +15,7 @@ class MealsControllerTest < ActionController::TestCase
   end
 
   test 'should get show' do
-    get :show
+    get :show, meal_id: @meal.id
     assert_response :success
   end
 
@@ -19,7 +26,7 @@ class MealsControllerTest < ActionController::TestCase
   end
 
   test 'should get edit' do
-    get :edit
+    get :edit, meal_id: @meal.id
     assert_response :success
     # TODO: form
   end

@@ -4,13 +4,14 @@ class Order
 
   belongs_to :meal
 
-  field :name, type: String
-  field :dish, type: String
-  field :comment, type: String
+  field :dish_name, type: String
+  # restaurant sensible?
+  # food image
+  field :info, type: String
 
   validates :name, presence: true, length: { minimum: 5 }
   validates :dish, presence: true, length: { minimum: 5 }
-  index({ name: 1 }, unique: true)
+  index({ name: 1 }, { unique: true })
 
   def list_names
     orders = query_string_anywhere(params[:query], 'name')
