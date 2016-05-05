@@ -6,6 +6,7 @@ class MealsControllerTest < ActionController::TestCase
                      location: 'Stairway to heaven',
                      orders_users_count: 12,
                      visible: true, private: false)
+    @meal.save
   end
 
   test 'should get index' do
@@ -15,7 +16,7 @@ class MealsControllerTest < ActionController::TestCase
   end
 
   test 'should get show' do
-    get :show, meal_id: @meal.id
+    get :show, id: @meal.id
     assert_response :success
   end
 
@@ -26,25 +27,16 @@ class MealsControllerTest < ActionController::TestCase
   end
 
   test 'should get edit' do
-    get :edit, meal_id: @meal.id
+    get :edit, id: @meal.id
     assert_response :success
     # TODO: form
   end
 
   test 'should redirect on create' do
     assert_difference('Meal.count') do
-      post :create, meal: {}
-      # TODO: new obj
+      post :create, meal: @meal.dup.inspect
     end
-    assert_redirected_to article_path(assigns(:meal))
-  end
-
-  test 'should show error on create existing' do
-    assert_no_difference('Meal.count') do
-      post :create, meal: {}
-      # TODO: existing obj
-    end
-    assert_response :success
+    assert_redirected_to meal_path(assigns(:meal))
   end
 
   test 'should update meal' do

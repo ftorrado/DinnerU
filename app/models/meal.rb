@@ -6,6 +6,8 @@ class Meal
   embeds_many :orders_containers
   embeds_many :comments
   belongs_to :user
+  has_and_belongs_to_many :invited_users, :class_name => 'User',
+                  :inverse_of => :invitations
 
   field :name, type: String
   field :description, type: String

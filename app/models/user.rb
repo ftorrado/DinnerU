@@ -1,10 +1,21 @@
+# Data model class for users, these create meals, comments and
+# orders. Orders are contained in orders_containers, when several
+# users make one order. Also users can be invited to meals.
 class User
   include Mongoid::Document
+  include ActiveModel::SecurePassword
+
+  has_many :meals
+  has_and_belongs_to_many :invitations, :class_name => 'Meal',
+                          :inverse_of => :invited_users
 
   field :name, type: String
   field :email, type: String
-  field :pw_crypt, type: String
+  field :password_digest, type: String
   field :address, type: String
+
+  has_secure_password
+  before_save { self.email = email.downcase }
 
   validates :name, presence: true,
             length: { minimum: 5, maximum: 30 }
@@ -13,7 +24,9 @@ class User
             length: { minimum: 5, maximum: 255 },
             format: { with: VALID_EMAIL_REGEX },
             uniqueness: { case_sensitive: false }
+  validates :password, presence: true, length: { minimum: 6 }
   index({ email: 1 }, { unique: true })
+
 
 
   # # Include default devise modules. Others available are:
