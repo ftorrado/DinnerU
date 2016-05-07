@@ -3,9 +3,8 @@ class Comment
 
   belongs_to :user
   embedded_in :meal
-  embedded_in :orders_container
+  embedded_in :order
 
-  field :content, type: String
-  validates :content, presence: true, length: { minimum: 2,
-                                                maximum: 60 }
+  field :text, type: String
+  validates :text, presence: true, length: { minimum: 2, maximum: 60 }
 end

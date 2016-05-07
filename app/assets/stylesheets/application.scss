@@ -22,20 +22,19 @@
 table.meal-list-item {
   width: 100%;
   border: solid 1px #bbb;
+  th, td {
+    padding: 0.5em;
+    vertical-align: baseline;
+    border-left: solid 1px #bbb;
+  }
+  tr:nth-child(even) {
+    border-bottom: solid 1px #bbb;
+  }
 }
 
-table.meal-list-item th, table.meal-list-item td {
-  padding: 0.5em;
-  vertical-align: baseline;
-  border-left: solid 1px #bbb;
-}
-
-table.meal-list-item tr:nth-child(even) {
-  border-bottom: solid 1px #bbb;
-}
-
-.input {
-  margin-bottom: 1em;
+.gravatar {
+  float: left;
+  margin-right: 1em;
 }
 
 /* search helper */
@@ -66,6 +65,7 @@ table.meal-list-item tr:nth-child(even) {
   margin-bottom: 0;
 }
 
+/* general purpose */
 .margin-top {
   margin-top: 1em;
 }

@@ -12,17 +12,23 @@
   <div class="page-header text-center">
     <h1><%= link_to 'DinnerU', root_path %></h1>
   </div>
-  <% unless flash.empty? %>
-      <div id="notice">
-        <% flash.each do |key, value| %>
-            <h4 class="flash label label-<%= key %>">
-              <%= value %>
-            </h4>
-        <% end %>
-      </div>
-  <% end %>
 
-  <%= yield %>
+  <div class="row">
+    <div class="col-md-8 col-md-offset-2">
+      <% unless flash.empty? %>
+          <div id="notice">
+            <% flash.each do |key, value| %>
+                <h4 class="flash label label-<%= key %>">
+                  <%= value %>
+                </h4>
+            <% end %>
+          </div>
+          <hr/>
+      <% end %>
+
+      <%= yield %>
+    </div>
+  </div>
 </div>
 
 </body>

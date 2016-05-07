@@ -2,16 +2,14 @@
 class Order
   include Mongoid::Document
 
-  belongs_to :meal
+  embedded_in :meal
+  belongs_to :user
+  embeds_many :comments
 
-  field :dish_name, type: String
-  # restaurant sensible?
-  # food image
-  field :info, type: String
+  field :description, type: String
+  field :dishes, type: Array, default: []
 
-  validates :name, presence: true, length: { minimum: 5 }
-  validates :dish, presence: true, length: { minimum: 5 }
-  index({ name: 1 }, { unique: true })
+  validates :description, presence: true, length: { maximum: 5 }
 
   def list_names
     orders = query_string_anywhere(params[:query], 'name')

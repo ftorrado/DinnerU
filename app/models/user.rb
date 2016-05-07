@@ -15,18 +15,17 @@ class User
   field :address, type: String
 
   has_secure_password
-  before_save { self.email = email.downcase }
+  before_save { email.downcase! }
 
   validates :name, presence: true,
             length: { minimum: 5, maximum: 30 }
-  VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
+  EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i
   validates :email, presence: true,
             length: { minimum: 5, maximum: 255 },
-            format: { with: VALID_EMAIL_REGEX },
+            format: { with: EMAIL_REGEX },
             uniqueness: { case_sensitive: false }
   validates :password, presence: true, length: { minimum: 6 }
   index({ email: 1 }, { unique: true })
-
 
 
   # # Include default devise modules. Others available are:

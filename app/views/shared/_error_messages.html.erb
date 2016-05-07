@@ -1,0 +1,12 @@
+<% if @meal.errors.any? %>
+    <div id="error_explanation" class="well">
+      <h3 class="alert alert-danger">
+        The form has <%= pluralize(@meal.errors.count, "error") %>.
+      </h3>
+      <ul>
+        <% @meal.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+<% end %>
