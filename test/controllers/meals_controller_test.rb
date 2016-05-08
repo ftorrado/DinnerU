@@ -2,11 +2,10 @@ require 'test_helper'
 
 class MealsControllerTest < ActionController::TestCase
   def setup
-    @meal = Meal.new(name: 'The last supper',
-                     location: 'Stairway to heaven',
-                     orders_users_count: 12,
-                     visible: true, private: false)
-    @meal.save
+    @meal = create(:meal)
+  end
+  def teardown
+    @meal.destroy
   end
 
   test 'should get index' do
@@ -34,7 +33,7 @@ class MealsControllerTest < ActionController::TestCase
 
   test 'should redirect on create' do
     assert_difference('Meal.count') do
-      post :create, meal: @meal.dup.inspect
+      post :create, {meal: build(:meal)}
     end
     assert_redirected_to meal_path(assigns(:meal))
   end

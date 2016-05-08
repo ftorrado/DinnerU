@@ -16,19 +16,17 @@
   <h4 class="margin-top">
     <span class="fa fa-user"></span> Users attending:
   </h4>
-  <p><%= @meal.orders_users_count %></p>
+  <p><%= @meal.orders.size %></p>
 
   <ul class="list-group">
-    <% @meals.invited_users_ids.each do |invited_id| %>
+    <% @meal.invited_users.each do |invited_user| %>
       <li class="list-group-item">
-        <% User.find(_id: invited_id) do |invited| %>
-          <%= "#{invited.name} <#{invited.email}>" %>
-        <% end %>
+        <%= "#{invited_user.name} <#{invited_user.email}>" %>
       </li>
     <% end %>
   </ul>
 
-  <% if @meal.private %>
+  <% if @meal.is_private %>
     <div class="well invite-form">
       <%= render 'orders/form' %>
     </div>
@@ -38,7 +36,7 @@
   <h4 class="margin-top">
     <span class="fa fa-user"></span> Orders:
   </h4>
-  <p><%= @meal.orders_count %></p>
+  <p><%= @meal.orders.size %></p>
 
   <div class="well order-form">
     <%= render 'orders/form' %>

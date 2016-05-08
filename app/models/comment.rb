@@ -6,5 +6,7 @@ class Comment
   embedded_in :order
 
   field :text, type: String
+
+  validates :user, presence: true
   validates :text, presence: true, length: { minimum: 2, maximum: 60 }
 end

@@ -6,9 +6,17 @@ class MealTest < ActiveSupport::TestCase
     @meal = create(:meal)
     @private_meal = create(:meal)
   end
+  def teardown
+    @user.destroy
+  end
 
   test 'should be valid' do
     assert @meal.valid?, @meal.errors.full_messages
+  end
+
+  test 'user creator should be present' do
+    @meal.user = nil
+    assert_not @meal.valid?
   end
 
   test 'name should be present' do
@@ -37,34 +45,34 @@ class MealTest < ActiveSupport::TestCase
   end
 
   test 'can reference creator user' do
-    assert_not @meal.user_id.nil?
+    assert_not @meal.user.nil?
     user_creator = User.find(@meal.user_id)
     assert_not user_creator.nil?
   end
 
   test 'orders can be add' do
-    @order = create(:order)
+    @order = build(:order)
     @meal.add_order @order
     assert @meal.orders.size == 1
   end
 
   test 'orders can be removed' do
-    @meal.remove_order @order
+    @meal.orders.delete(@order)
     assert @meal.orders.empty?
   end
 
   test 'users can be invited' do
-    assert @meal.invite_user @user
+    @meal.invite_user @user
     assert @meal.invited_users.size == 1
   end
 
   test 'users are not invited twice' do
-    assert_not @meal.invite_user @user
+    @meal.invite_user @user
     assert @meal.invited_users.size == 1
   end
 
   test 'users invitations can be removed' do
-    assert_not @meal.invite_user @user
-    assert @meal.invited_users.size == 1
+    @meal.invited_users.delete(@user)
+    assert @meal.invited_users.size == 0
   end
 end

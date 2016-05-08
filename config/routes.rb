@@ -1,13 +1,12 @@
 Rails.application.routes.draw do
-  get 'users/new'
+  root 'meals#index'
+  get 'signup' => 'users#new'
+  match '/orders/list/dishes', to: 'orders#list_dishes', via: 'post'
 
-  devise_for :users
-  mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
   resources :meals do
     resources :orders
   end
+  resources :users
 
-  root 'meals#index'
-  match '/orders/list/names', to: 'orders#list_names', via: 'post'
-  match '/orders/list/dishes', to: 'orders#list_dishes', via: 'post'
+  mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
 end

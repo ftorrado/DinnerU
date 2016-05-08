@@ -1,6 +1,9 @@
 <h3>Sign up</h3>
 
 <%= form_for(@user) do |f| %>
+  <%= render partial: 'shared/error_messages',
+             locals: { record: @user } %>
+
   <%= f.label :name %>
   <%= f.text_field :name %>
 

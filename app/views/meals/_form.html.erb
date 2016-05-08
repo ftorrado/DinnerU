@@ -1,18 +1,6 @@
 <%= form_for @meal do |f| %>
-
-    <% if @meal.errors.any? %>
-        <div id="error_explanation" class="well">
-          <h2>
-            <%= pluralize(@meal.errors.count, "error") %> prohibited
-            this meal from being saved:
-          </h2>
-          <ul>
-            <% @meal.errors.full_messages.each do |msg| %>
-                <li><%= msg %></li>
-            <% end %>
-          </ul>
-        </div>
-    <% end %>
+    <%= render partial: 'shared/error_messages',
+               locals: { record: @meal } %>
 
     <p>
       <%= f.label :name %><br>
@@ -37,5 +25,4 @@
         </div>
       </div>
     </p>
-
 <% end %>

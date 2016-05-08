@@ -12,7 +12,7 @@ class MealPolicy
 
   def show?
     if meal.is_private
-      meal.user_id == user.id || meal.invited_users_ids.has(user.id)
+      meal.user_id == user.id || meal.invited_users_ids.include?(user.id)
     else
       true
     end

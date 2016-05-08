@@ -9,7 +9,7 @@ class Order
   field :description, type: String
   field :dishes, type: Array, default: []
 
-  validates :description, presence: true, length: { maximum: 5 }
+  validates :description, presence: true, length: { maximum: 60 }
 
   def list_names
     orders = query_string_anywhere(params[:query], 'name')

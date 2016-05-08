@@ -5,7 +5,7 @@ class User
   include Mongoid::Document
   include ActiveModel::SecurePassword
 
-  has_many :meals
+  has_many :meals, :class_name => 'Meal', :inverse_of => :user
   has_and_belongs_to_many :invitations, :class_name => 'Meal',
                           :inverse_of => :invited_users
 
@@ -13,6 +13,7 @@ class User
   field :email, type: String
   field :password_digest, type: String
   field :address, type: String
+  field :is_guest, type: Boolean, default: true
 
   has_secure_password
   before_save { email.downcase! }

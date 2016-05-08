@@ -1,6 +1,7 @@
 # Define factories for generating meals
 FactoryGirl.define do
   factory :meal do
+    user
     name 'DinnerU get together!'
     description 'This is the event description'
     location 'Dave Pub'
@@ -10,6 +11,7 @@ FactoryGirl.define do
   end
 
   factory :private_meal, class: Meal do
+    user
     name 'Sample private meal'
     is_visible false
     is_private true
