@@ -1,11 +1,11 @@
 <% if record.errors.any? %>
-  <div id="error_explanation" class="well">
+  <div class="error-panel well">
     <h3 class="alert alert-danger">
-      The form has <%= pluralize(record.errors.count, "error") %>:
+      The form has <%= pluralize(record.errors.count, 'error') %>:
     </h3>
     <ul>
       <% record.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
+        <li class="error-panel__item"><%= msg %></li>
       <% end %>
     </ul>
   </div>

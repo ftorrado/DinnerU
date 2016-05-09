@@ -2,7 +2,7 @@ require 'test_helper'
 
 class CommentTest < ActiveSupport::TestCase
   def setup
-    @meal = create(:meal)
+    @meal = build(:meal)
     @comment = build(:comment)
     @meal.comments << @comment
     @meal.save

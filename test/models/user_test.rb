@@ -2,6 +2,7 @@ require 'test_helper'
 
 class UserTest < ActiveSupport::TestCase
   def setup
+    User.delete_all()
     @user = create(:user)
   end
   def teardown
