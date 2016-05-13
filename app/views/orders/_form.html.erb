@@ -1,23 +1,11 @@
 <%= form_for([@meal, @meal.orders.build]) do |f| %>
-    <div class="input" style="overflow: visible;">
-      <%= f.label :name %><br>
-      <%= f.text_field :name, :class => 'form-control' %>
-        <div id="order-name-helper" class="search-helper hidden"
-             data-source="<%= orders_list_names_path %>">
-          <div></div>
-        </div>
-    </div>
-    <div class="input" style="overflow: visible;">
-      <%= f.label :dish %><br>
-      <%= f.text_field :dish, :class => 'form-control' %>
-        <div id="order-dish-helper" class="search-helper hidden"
-             data-source="<%= orders_list_dishes_path %>">
-          <div></div>
-        </div>
-    </div>
     <p>
-      <%= f.label :comment %><br>
-      <%= f.text_area :comment, :class => 'form-control' %>
+      <%= f.label :description %><br>
+      <%= f.text_area :description, :class => 'form-control' %>
+    </p>
+    <p>
+      TODO: Show here the form to choose dishes and submit
+      asynchronously
     </p>
     <p class="text-right">
       <%= f.submit :class => 'btn btn-primary' %>

@@ -12,14 +12,15 @@ class MealPolicy
 
   def show?
     if meal.is_private
-      meal.user_id == user.id || meal.invited_users_ids.include?(user.id)
+      !user.nil? && (meal.user_id == user.id ||
+        meal.invited_users_ids.include?(user.id))
     else
       true
     end
   end
 
   def create?
-    !user.is_guest?
+    !user.nil? && !user.is_guest?
   end
 
   def new?
@@ -27,7 +28,7 @@ class MealPolicy
   end
 
   def update?
-    meal.user_id == user.id
+    !user.nil? && meal.user_id == user.id
   end
 
   def edit?
@@ -35,7 +36,7 @@ class MealPolicy
   end
 
   def destroy?
-    meal.user_id == user.id
+    !user.nil? && meal.user_id == user.id
   end
 
   class Scope

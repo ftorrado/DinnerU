@@ -1,18 +1,30 @@
 # Controller class for the orders
 class OrdersController < ApplicationController
-  def list_names
-    @list = Order.list_names
-    render 'list', layout: false
-  end
-
-  def list_dishes
-    @list = Order.list_dishes
-    render 'list', layout: false
+  def show
+    @order = Order.find(params[:id])
+    byebug
+    render '_order'
   end
 
   def create
     @meal = Meal.find(params[:meal_id])
-    @order = @meal.orders.create(order_params)
+    temp_user = current_or_guest_user
+    # @meal.orders.where(user: temp_user)
+    @order = Order.new(order_params)
+    @order.user = temp_user
+    @meal.orders << @order
+    if !@meal.save
+      flash[:danger] = 'Error storing data'
+    end
+    redirect_to meal_path(@meal)
+  end
+
+  def update
+    @meal = Meal.find(params[:meal_id])
+    @order = @meal.orders.find(params[:id])
+    if !@order.update(order_params)
+      flash[:danger] = 'Error storing data'
+    end
     redirect_to meal_path(@meal)
   end
 
@@ -25,7 +37,7 @@ class OrdersController < ApplicationController
 
   private
 
-  def order_params
-    params.require(:order).permit(:name, :dish, :comment)
-  end
+    def order_params
+      params.require(:order).permit(:description)
+    end
 end

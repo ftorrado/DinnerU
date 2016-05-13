@@ -1,18 +1,27 @@
-<% if !order.nil? && !order.name.blank? %>
+<% if !order.nil? %>
   <div class="col-lg-4 col-sm-6 col-xs-12">
     <div class="panel panel-info">
-      <div class="panel-heading"><strong>Name:</strong> <%= order.name %></div>
+      <div class="panel-heading">
+        <strong>Name:</strong> <%= order.user.name %>
+      </div>
       <div class="panel-body">
+        <p>
+          <strong>Dishes:</strong>
+          TODO: the dishes list
+        </p>
+        <p>
+          <strong>Comments:</strong>
+          TODO: the comments list
+        </p>
         <div class="pull-right">
           <%= link_to raw('<i class="fa fa-times"></i>'), [order.meal, order],
                       method: :delete,
                       data: { confirm: 'Are you sure?' },
                       :class => 'btn btn-sm btn-danger' %>
         </div>
-        <p><strong>Dish:</strong> <%= order.dish %></p>
-        <% if !order.comment.nil? && !order.comment.blank? %>
-            <p>Comment: <%= order.comment %></p>
-        <% end %>
+      </div>
+      <div class="panel-footer">
+        <%= order.description %>
       </div>
     </div>
   </div>

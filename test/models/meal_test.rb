@@ -1,14 +1,8 @@
 require 'test_helper'
 
 class MealTest < ActiveSupport::TestCase
-  def setup
-    @user = create(:user)
-    @meal = create(:meal)
-    @private_meal = create(:meal)
-  end
-  def teardown
-    @user.destroy
-  end
+  setup :meals_setup
+  teardown :meals_teardown
 
   test 'should be valid' do
     assert @meal.valid?, @meal.errors.full_messages

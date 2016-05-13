@@ -9,6 +9,7 @@ class OrderTest < ActiveSupport::TestCase
   end
 
   test 'user creator should be present' do
+    assert_not_nil @order.user
     @order.user = nil
     assert_not @order.valid?
   end
@@ -23,14 +24,11 @@ class OrderTest < ActiveSupport::TestCase
     assert_not_nil User.find(@order.user)
   end
 
-  test 'dishes can be add' do
-    @dish = build(:dish)
-    @order.dishes << @dish
+  test 'dishes can be add and removed' do
+    dish = create(:dish)
+    @order.dishes << dish
     assert @order.dishes.size == 1
-  end
-
-  test 'dishes can be removed' do
-    @order.dishes.delete(@dish)
+    @order.dishes.delete(dish)
     assert_empty @order.dishes
   end
 end

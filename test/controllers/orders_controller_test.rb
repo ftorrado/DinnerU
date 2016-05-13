@@ -3,30 +3,15 @@ require 'test_helper'
 class OrdersControllerTest < ActionController::TestCase
   require 'test_helper'
 
-  def setup
-    @meal = build(:meal)
-    @order = build(:order)
-    @meal.orders << @order
-    @meal.save
-  end
-  def teardown
-    @meal.destroy
-  end
-
-  test 'should get index' do
-    get :index, meal_id: @meal
-    assert_response :success
-    assert_not_nil assigns(:meal)
-    assert_not_nil assigns(:orders)
-    assert_template ' orders/index'
-  end
+  setup :orders_setup
+  teardown :orders_teardown
 
   test 'should get show' do
     get :show, meal_id: @meal, id: @order
     assert_response :success
     assert_not_nil assigns(:meal)
     assert_not_nil assigns(:order)
-    assert_template ' orders/show'
+    assert_template 'orders/show'
   end
 
   test 'should get new' do
@@ -34,20 +19,19 @@ class OrdersControllerTest < ActionController::TestCase
     assert_response :success
     assert_not_nil assigns(:meal)
     assert_not_nil assigns(:order)
-    assert_template ' meals/new'
+    assert_template 'meals/new'
   end
 
   test 'should create order' do
-    assert_difference('Order.count', 1) do
-      post :create, meal_id: @meal, order: build(:order)
+    byebug
+    assert_difference('@meal.orders.count', 1) do
+      post :create, meal_id: @meal, order: {description: 'new order'}
     end
     assert_redirected_to order_path(assigns(:order))
   end
 
-  test 'should create meal' do
-    assert_raises(Exception) do
-      post :create, meal_id: @meal, order: {invalid_param: 'garbage'}
-    end
+  test 'should not accept invalid params' do
+    post :create, meal_id: @meal, order: {invalid_param: 'garbage'}
   end
 
   test 'should get edit' do
@@ -55,20 +39,21 @@ class OrdersControllerTest < ActionController::TestCase
     assert_response :success
     assert_not_nil assigns(:meal)
     assert_not_nil assigns(:order)
-    assert_template ' orders/edit'
+    assert_template 'orders/edit'
   end
 
   test 'should update order' do
-    assert_no_difference('Order.count') do
-      post :update, meal_id: @meal, order: @order
+    assert_no_difference('@meal.orders.count') do
+      post :update, meal_id: @meal, id: @order, order:
+                             {description: 'edited order'}
     end
-    assert_redirected_to order_path(assigns(:order))
+    assert_redirected_to meal_path(assigns(:meal))
   end
 
-  test 'should destroy meal' do
-    assert_no_difference('Order.count', -1) do
+  test 'should destroy order' do
+    assert_no_difference('@meal.orders.count', -1) do
       post :destroy, meal_id: @meal, id: @order
     end
-    assert_redirected_to orders_path
+    assert_redirected_to meal_path(assigns(:meal))
   end
 end

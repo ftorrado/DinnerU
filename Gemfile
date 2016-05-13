@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '4.2.6'
+gem 'rails', '4.2.2'
 gem 'sass-rails', '~> 5.0'
 gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 4.1.0'
@@ -15,8 +15,7 @@ gem 'activeresource'
 gem 'active_model_serializers', '~> 0.9'
 gem 'mongoid'
 gem 'pundit'
-gem 'devise'
-gem 'rails_admin'
+# gem 'devise'
 
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'
@@ -31,6 +30,7 @@ group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
   gem 'spring',      '1.1.3'
+  gem 'rails_admin'
 end
 
 group :development do

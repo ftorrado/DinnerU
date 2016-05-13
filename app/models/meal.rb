@@ -12,7 +12,7 @@ class Meal
   field :name, type: String
   field :description, type: String
   field :location, type: String
-  field :date, type: DateTime
+  field :date, type: DateTime, default: DateTime.new
   field :is_visible, type: Boolean, default: false
   field :is_private, type: Boolean, default: false
 

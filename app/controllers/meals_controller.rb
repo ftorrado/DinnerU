@@ -19,7 +19,6 @@ class MealsController < ApplicationController
 
   def create
     @meal = Meal.new(meal_params)
-
     if @meal.save
       redirect_to @meal
     else
@@ -29,7 +28,6 @@ class MealsController < ApplicationController
 
   def update
     @meal = Meal.find(params[:id])
-
     if @meal.update(meal_params)
       redirect_to @meal
     else
@@ -41,7 +39,6 @@ class MealsController < ApplicationController
     @meal = Meal.find(params[:id])
     authorize @meal
     @meal.destroy
-
     redirect_to meals_path
   end
 
