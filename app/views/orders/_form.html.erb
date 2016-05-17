@@ -3,29 +3,7 @@
       <%= f.label :description %><br>
       <%= f.text_area :description, :class => 'form-control' %>
     </p>
-    <p>
-      TODO: Show here the form to choose dishes and submit
-      asynchronously
-    </p>
     <p class="text-right">
       <%= f.submit :class => 'btn btn-primary' %>
     </p>
 <% end %>
-
-<script>
-    $(document).ready(function() {
-        var searchHelperName = new SearchHelper(
-            $('.order-form input#order_name'),
-            $('.order-form #order-name-helper'),
-            $('.order-form input#order_dish'),
-            {ajaxRequestMode: "default"}
-        );
-
-        var searchHelperDish = new SearchHelper(
-            $('.order-form input#order_dish'),
-            $('.order-form #order-dish-helper'),
-            $('.order-form input#order_comment'),
-            {ajaxRequestMode: "default"}
-        );
-    });
-</script>

@@ -62,6 +62,17 @@ class ActiveSupport::TestCase
     end
     def orders_teardown
       @meal.destroy
+      @user.destroy
+    end
+
+    def comments_setup
+      orders_setup
+      @comment = build(:comment, user: @user)
+      @meal.comments << @comment
+      @meal.save
+    end
+    def comments_teardown
+      orders_teardown
     end
 
     def dishes_setup

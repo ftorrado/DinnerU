@@ -2,6 +2,20 @@
 
 Small application to schedule in advance what you will order to eat!
 
-* Ruby version 2.2.3
-* Rails version 4.2.6
-* Needs a MongoDB instance running locally
+=== TODO
+
+* Should do proper email confirmation, probably using the "Devise"
+ gem, no reason to do it manually
+* Usage of guest users (removed feature) and tokenized invite emails
+* Testing the "Pundit" authorization rules should be done seperatly
+ as integration tests or is fine to do it on controller tests?
+ (pundit/rspec)
+* Missing authorization rules for Orders avoiding users to change
+each other's orders information
+* At least +Meal+ and +Dish+ indexes should have pagination
+
+=== Project info
+
+* Ruby version 2.2.4
+* Rails version 4.2.2
+* Requires MongoDB running locally

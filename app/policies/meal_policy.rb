@@ -1,3 +1,4 @@
+# Policies for access to meal objects
 class MealPolicy
   attr_reader :user, :meal
 
@@ -6,21 +7,17 @@ class MealPolicy
     @meal = meal
   end
 
+  # Meals can be hidden so you send the link to the event
   def index?
-    @meals = policy_scope(Meal)
+    @meals = scope.where(is_visible: true)
   end
 
   def show?
-    if meal.is_private
-      !user.nil? && (meal.user_id == user.id ||
-        meal.invited_users_ids.include?(user.id))
-    else
-      true
-    end
+    scope.where(id: record.id).exists?
   end
 
   def create?
-    !user.nil? && !user.is_guest?
+    !user.nil? && !user.is_guest
   end
 
   def new?
@@ -28,7 +25,7 @@ class MealPolicy
   end
 
   def update?
-    !user.nil? && meal.user_id == user.id
+    !user.nil? && meal.user == user
   end
 
   def edit?
@@ -36,7 +33,17 @@ class MealPolicy
   end
 
   def destroy?
-    !user.nil? && meal.user_id == user.id
+    update?
+  end
+
+  # Permission for placing orders on meals, would not necessarily
+  # be the same as the "show?" permission
+  def participate?
+    show?
+  end
+
+  def scope
+    Pundit.policy_scope!(user, Meal)
   end
 
   class Scope
@@ -49,11 +56,11 @@ class MealPolicy
 
     def resolve
       if user.nil?
-        scope.publicly_visible
+        scope.where(is_private: false)
       else
-        scope.any_of({ is_visible: true },
-                     { invited_users_ids: user.id },
-                     { user_id: user.id })
+        scope.any_of({ is_private: false },
+                     { is_private: true, invited_users_ids: user.id },
+                     { is_private: true, user_id: user.id })
       end
     end
   end

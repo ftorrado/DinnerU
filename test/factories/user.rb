@@ -9,12 +9,21 @@ FactoryGirl.define do
     initialize_with  { User.find_or_create_by(email: email) }
   end
 
+  factory :josh do
+    name 'Josh'
+    email 'josh@example.com'
+    password 'foobar'
+    password_confirmation 'foobar'
+    is_guest false
+    initialize_with  { User.find_or_create_by(email: email) }
+  end
+
   factory :guest, class: User do
     name { "guest_#{rand(1000000)}" }
     is_guest true
 
     to_create do |instance|
-      instance.save!
+      instance.save(validate: false)
     end
   end
 end

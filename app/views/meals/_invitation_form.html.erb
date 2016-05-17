@@ -1,0 +1,29 @@
+<% form_tag meal_invite(@meal) do %>
+    <p>
+      <%= label_tag :email %><br>
+      <%= text_field_tag 'Email', params[:email],
+                         class: 'form-control' %>
+    </p>
+
+    <p>
+      <%= label_tag :username %><br>
+      <%= text_field_tag 'User name', params[:username],
+                         class: 'form-control',
+                         id: 'username-auto',
+                         autocomplete: 'off' %>
+      <script type="text/javascript">
+        $(function () {
+          $('#username-auto').typeahead({
+            source: function(query, process) {
+              $.get("<%= users_path %>",
+                    query, process, "json")
+            }
+          });
+        });
+      </script>
+    </p>
+
+    <p>
+      <%= submit_tag 'Invite', name: nil, class: 'btn btn-primary' %>
+    </p>
+<% end %>

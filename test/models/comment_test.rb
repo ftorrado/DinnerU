@@ -1,15 +1,8 @@
 require 'test_helper'
 
 class CommentTest < ActiveSupport::TestCase
-  def setup
-    @meal = build(:meal)
-    @comment = build(:comment)
-    @meal.comments << @comment
-    @meal.save
-  end
-  def teardown
-    @meal.destroy
-  end
+  setup :comments_setup
+  teardown :comments_teardown
 
   test 'should be valid' do
     assert @comment.valid?, @comment.errors.full_messages

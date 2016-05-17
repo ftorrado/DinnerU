@@ -1,3 +1,4 @@
+# Default permissions for Pundit
 class ApplicationPolicy
   attr_reader :user, :record
 
@@ -7,15 +8,15 @@ class ApplicationPolicy
   end
 
   def index?
-    false
+    @records = scope.where(is_visible: true)
   end
 
   def show?
-    scope.where(:id => record.id).exists?
+    scope.where(id: record.id).exists?
   end
 
   def create?
-    false
+    !user.nil? && !user.is_guest
   end
 
   def new?
@@ -23,7 +24,8 @@ class ApplicationPolicy
   end
 
   def update?
-    false
+    return false if user.nil?
+    record.user == user
   end
 
   def edit?
@@ -31,7 +33,7 @@ class ApplicationPolicy
   end
 
   def destroy?
-    false
+    update?
   end
 
   def scope
@@ -47,7 +49,11 @@ class ApplicationPolicy
     end
 
     def resolve
-      scope
+      if !user.nil? && !user.is_guest
+        scope.all
+      else
+        scope.none
+      end
     end
   end
 end

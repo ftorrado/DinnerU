@@ -14,7 +14,13 @@
 
     <p>
       <%= f.label :date %><br>
-      <%= f.text_field :date, :class => 'form-control' %>
+      <%= f.text_field :date, class: 'form-control',
+                       id: 'datetimepicker' %>
+      <script type="text/javascript">
+        $(function () {
+          $('#datetimepicker').datetimepicker();
+        });
+      </script>
     </p>
 
     <p class="margin-top">

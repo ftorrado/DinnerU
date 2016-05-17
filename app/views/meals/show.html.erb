@@ -1,53 +1,67 @@
 <div class="btn-group btn-group-justified">
-  <%= link_to raw('<i class="fa fa-chevron-left"></i> Back'), meals_path, :class => 'btn btn-lg btn-default' %>
+  <%= link_to raw('<i class="fa fa-chevron-left"></i> Back'),
+              root_path, class: 'btn btn-lg btn-default' %>
 </div>
 
 <div class="margin-top">
-  <h4>Name:</h4>
-  <p><%= @meal.name %></p>
-
-  <h4><span class="fa fa-map-marker"></span> Location:</h4>
-  <p><%= @meal.location %></p>
-
-  <h4><span class="fa fa-calendar"></span> Date:</h4>
-  <p><%= @meal.date %></p>
+  <h4>
+    Name: <small><%= @meal.name %></small>
+  </h4>
+  <h4>
+    <span class="fa fa-map-marker"></span>
+    Location: <small><%= @meal.location %></small>
+  </h4>
+  <h4>
+    <span class="fa fa-calendar"></span>
+    Date: <small><%= @meal.date.to_s %></small>
+  </h4>
 
 
   <h4 class="margin-top">
-    <span class="fa fa-user"></span> Users attending:
+    Invited users: <small><%= @meal.invited_users.size %></small>
   </h4>
-  <p><%= @meal.orders.size %></p>
+
+  <% if policy(@meal).edit? %>
+      <div class="well">
+        <%= render 'meals/invitation_form' %>
+      </div>
+  <% end %>
 
   <ul class="list-group">
     <% @meal.invited_users.each do |invited_user| %>
-      <li class="list-group-item">
-        <%= "#{invited_user.name} <#{invited_user.email}>" %>
+      <li class="list-group-item clearfix">
+        <%= "#{invited_user.name}" %>
+
+        <% if policy(@meal).edit? %>
+          <span class="pull-right">
+            <%= link_to 'Remove', meal_uninvite_path(@meal, invited_user),
+                        method: :delete,
+                        data: { confirm: 'Are you sure?' },
+                        class: 'btn btn-sm btn-danger' %>
+          </span>
+        <% end %>
       </li>
     <% end %>
   </ul>
 
-  <% if @meal.is_private %>
-    <div class="well invite-form">
+
+  <h4 class="margin-top">
+    <span class="fa fa-user"></span>
+    Orders: <small><%= @meal.orders.size %></small>
+  </h4>
+
+  <% if policy(@meal).participate? &&
+      !@meal.has_order_from?(current_user) %>
+    <div class="well">
       <%= render 'orders/form' %>
     </div>
   <% end %>
 
-
-  <h4 class="margin-top">
-    <span class="fa fa-user"></span> Orders:
-  </h4>
-  <p><%= @meal.orders.size %></p>
-
-  <div class="well order-form">
-    <%= render 'orders/form' %>
-  </div>
-
-  <% if !@meal.orders.nil? && !@meal.orders.blank? %>
+  <% if !@meal.orders.exists? %>
       <div class="row">
         <%= render @meal.orders %>
       </div>
   <% end %>
-
 
   <div class="margin-top btn-group btn-group-justified">
     <%= link_to 'Destroy', meal_path(@meal),

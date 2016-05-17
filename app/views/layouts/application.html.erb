@@ -9,8 +9,22 @@
 <body>
 
 <div class="container">
-  <div class="page-header text-center">
-    <h1><%= link_to 'DinnerU', root_path %></h1>
+  <div class="row">
+    <div class="col-sm-8">
+      <div class="page-header text-center">
+        <h1><%= link_to 'DinnerU', root_path %></h1>
+      </div>
+    </div>
+    <div class="col-sm-4 text-center">
+      <% if logged_in? %>
+        <p><%= link_to 'Profile', current_user,
+                       class: 'btn btn-primary' %></p>
+        <p><%= link_to 'Log out', logout_path, method: 'delete',
+                       class: 'btn btn-primary' %></p>
+      <% else %>
+        <%= link_to 'Log in', login_path, class: 'btn btn-primary' %>
+      <% end %>
+    </div>
   </div>
 
   <div class="row">

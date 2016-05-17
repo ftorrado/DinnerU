@@ -28,12 +28,16 @@ class Meal
   scope :privately_visible_by, lambda { |user|
     where(user_id: user.id, is_visible: false)
   }
+  
+  def has_order_from?(user)
+    self.orders.where(user_id: user.id).exists?
+  end
 
-  def invite_user (user)
+  def invite_user(user)
     invited_users << user unless invited_users.include?(user.id)
   end
 
-  def add_order (order)
-    orders << order unless orders.include?(order)
+  def add_order(order)
+    orders << order unless has_order_from?(order.user)
   end
 end

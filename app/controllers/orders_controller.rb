@@ -1,13 +1,22 @@
-# Controller class for the orders
+# Controller class for the orders embedded inside meals
 class OrdersController < ApplicationController
   def show
-    @order = Order.find(params[:id])
-    byebug
+    @meal = Meal.find(params[:meal_id])
+    @order = @meal.orders.find(params[:id])
+    redirect_to :status => 404 if @order.nil?
     render '_order'
+  end
+
+  def new
+    @meal = Meal.find(params[:meal_id])
+    redirect_to :status => 404 if @meal.nil?
+    @order = Order.new
+    render '_form'
   end
 
   def create
     @meal = Meal.find(params[:meal_id])
+    redirect_to :status => 404 if @meal.nil?
     temp_user = current_or_guest_user
     # @meal.orders.where(user: temp_user)
     @order = Order.new(order_params)
@@ -19,9 +28,17 @@ class OrdersController < ApplicationController
     redirect_to meal_path(@meal)
   end
 
+  def edit
+    @meal = Meal.find(params[:meal_id])
+    @order = @meal.orders.find(params[:id])
+    redirect_to :status => 404 if @order.nil?
+    render '_form'
+  end
+
   def update
     @meal = Meal.find(params[:meal_id])
     @order = @meal.orders.find(params[:id])
+    redirect_to :status => 404 if @order.nil?
     if !@order.update(order_params)
       flash[:danger] = 'Error storing data'
     end
@@ -31,6 +48,7 @@ class OrdersController < ApplicationController
   def destroy
     @meal = Meal.find(params[:meal_id])
     @order = @meal.orders.find(params[:id])
+    redirect_to :status => 404 if @order.nil?
     @order.destroy
     redirect_to meal_path(@meal)
   end

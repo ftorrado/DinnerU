@@ -2,16 +2,16 @@
 module SessionsHelper
   # Logs user in
   def log_in(user)
-    session[:user_id] = user.id
+    session[:user_id] = user.id.to_s
   end
 
   # Remembers a user in a persistent session.
   def remember(user)
     user.remember
     if user.is_guest
-      cookies.permanent.signed[:guest_id] = user.id
+      cookies.permanent.signed[:guest_id] = user.id.to_s
     else
-      cookies.permanent.signed[:user_id] = user.id
+      cookies.permanent.signed[:user_id] = user.id.to_s
     end
     cookies.permanent[:remember_token] = user.remember_token
   end
@@ -32,7 +32,7 @@ module SessionsHelper
   # If user is logged in, return current_user, else return guest_user
   def current_or_guest_user
     if current_user
-      if session[:guest_id] && session[:guest_id] != current_user.id
+      if session[:guest_id] && session[:guest_id] != current_user.id.to_s
         upgrade_user
         # reload guest_user to prevent caching problems before destruction
         guest_user(with_retry = false).reload.try(:destroy)
@@ -46,7 +46,8 @@ module SessionsHelper
 
   # Gets current guest_user, creating one as needed
   def guest_user(with_retry = true)
-    @guest_user ||= User.find(session[:guest_id] ||= create_guest_user.id)
+    @guest_user ||= User.find(
+      session[:guest_id] ||= create_guest_user.id.to_s)
 
   rescue Mongoid::Errors::DocumentNotFound
     session[:guest_id] = nil
@@ -87,7 +88,7 @@ module SessionsHelper
       user = User.create(name: "guest_#{rand(1000000)}",
                          is_guest: true)
       user.save!(:validate => false)
-      session[:guest_id] = user.id
+      session[:guest_id] = user.id.to_s
       user
     end
 end

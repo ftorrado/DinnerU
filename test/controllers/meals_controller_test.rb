@@ -26,6 +26,7 @@ class MealsControllerTest < ActionController::TestCase
   end
 
   test 'should create meal' do
+    do_log_in @user
     assert_difference('Meal.count', 1) do
       post :create, meal: attributes_for(:meal)
     end
@@ -33,7 +34,11 @@ class MealsControllerTest < ActionController::TestCase
   end
 
   test 'should not accept invalid data' do
-    post :create, meal: {invalid_param: 'garbage'}
+    do_log_in @user
+    assert_no_difference('Meal.count') do
+      post :create, meal: {invalid_param: 'garbage'}
+    end
+    assert_response :success
   end
 
   test 'should get edit' do
@@ -67,7 +72,26 @@ class MealsControllerTest < ActionController::TestCase
     assert_raise(Pundit::NotAuthorizedError) do
       post :destroy, id: @meal
     end
-    assert_redirected_to meals_path
+    # only redirects when successful
+    assert_response :success
     meals_teardown
+  end
+
+  test 'should invite other users without duplicates if creator' do
+    do_log_in @user
+    josh = create(:josh)
+    assert_difference('@meal.invited_users.count', 1) do
+      post :invite, id: @meal, invite: { id: josh.id }
+    end
+    josh.destroy
+  end
+
+  test 'should not invite if not meal creator' do
+    josh = create(:josh)
+    do_log_in josh
+    assert_no_difference('@meal.invited_users.count') do
+      post :invite, id: @meal, invite: { id: @user.id }
+    end
+    josh.destroy
   end
 end

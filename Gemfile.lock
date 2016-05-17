@@ -53,6 +53,8 @@ GEM
     bootstrap-sass (3.3.6)
       autoprefixer-rails (>= 5.2.1)
       sass (>= 3.3.4)
+    bootstrap3-datetimepicker-rails (4.17.37)
+      momentjs-rails (>= 2.8.1)
     bson (4.1.1)
     builder (3.2.2)
     byebug (9.0.0)
@@ -131,6 +133,8 @@ GEM
       builder
       minitest (>= 5.0)
       ruby-progressbar
+    momentjs-rails (2.11.1)
+      railties (>= 3.1)
     mongo (2.2.5)
       bson (~> 4.0)
     mongoid (5.1.3)
@@ -257,6 +261,7 @@ DEPENDENCIES
   activeresource
   bcrypt (~> 3.1.7)
   bootstrap-sass
+  bootstrap3-datetimepicker-rails (~> 4.17.37)
   byebug
   coffee-rails (~> 4.1.0)
   coffee-script-source (= 1.8.0)
@@ -266,6 +271,7 @@ DEPENDENCIES
   jquery-rails
   mini_backtrace (= 0.1.3)
   minitest-reporters (= 1.0.5)
+  momentjs-rails (>= 2.9.0)
   mongoid
   pundit
   rails (= 4.2.2)

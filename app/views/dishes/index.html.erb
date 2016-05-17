@@ -1,0 +1,48 @@
+<div class="btn-group btn-group-justified">
+  <%= link_to raw('<i class="fa fa-plus"></i> New'), new_dish_path,
+              class: 'btn btn-lg btn-default' %>
+</div>
+
+<% form_tag dishes_path, :method => 'get' do %>
+  <p>
+    <%= text_field_tag :search, params[:search],
+                       class: 'form-control' %>
+    <%= submit_tag 'Search', name: nil %>
+  </p>
+<% end %>
+
+<div class="well text-center margin-top">
+  <% if @dishes.size <= 0 && !params[:search].empty? %>
+    Nothing found matching the search query
+  <% elsif @dishes.size <= 0 %>
+    List is still empty
+  <% end %>
+
+  <table class="dish-list-item">
+    <% @dishes.each do |dish| %>
+      <tr>
+        <td>
+          <h3><%= link_to dish.name, dish_path(dish)%></h3>
+        </td>
+        <td class="text-center">
+          <span class="fa fa-calendar"></span>
+        </td>
+        <td class="text-center">
+          <span class="fa fa-user"></span>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <span class="fa fa-map-marker"></span>
+          <%= dish.location %>
+        </td>
+        <td>
+          <%= dish.date %>
+        </td>
+        <td>
+          <%= dish.orders.count %>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+</div>
