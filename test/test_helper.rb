@@ -9,7 +9,7 @@ class ActiveSupport::TestCase
 
   # (Copy from SessionsHelper) Logs user in
   # TODO: find better workaround than duplicating code
-  def do_log_in(user, options = {})
+  def do_login_as(user, options = {})
     password    = options[:password]    || 'foobar'
     remember_me = options[:remember_me] || '1'
     if integration_test?
@@ -76,9 +76,11 @@ class ActiveSupport::TestCase
     end
 
     def dishes_setup
+      @user = create(:user)
       @dish = create(:dish)
     end
     def dishes_teardown
       @dish.destroy
+      @user.destroy
     end
 end

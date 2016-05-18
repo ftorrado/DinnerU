@@ -26,7 +26,7 @@ class MealsControllerTest < ActionController::TestCase
   end
 
   test 'should create meal' do
-    do_log_in @user
+    do_login_as @user
     assert_difference('Meal.count', 1) do
       post :create, meal: attributes_for(:meal)
     end
@@ -34,7 +34,7 @@ class MealsControllerTest < ActionController::TestCase
   end
 
   test 'should not accept invalid data' do
-    do_log_in @user
+    do_login_as @user
     assert_no_difference('Meal.count') do
       post :create, meal: {invalid_param: 'garbage'}
     end
@@ -50,16 +50,16 @@ class MealsControllerTest < ActionController::TestCase
 
   test 'should update meal' do
     assert_no_difference('Meal.count') do
-      post :update, id: @meal, meal: attributes_for(:meal)
+      put :update, id: @meal, meal: attributes_for(:meal)
     end
     assert_redirected_to meal_path(assigns(:meal))
   end
 
   test 'should destroy meal if creator' do
     meals_setup
-    do_log_in @user
+    do_login_as @user
     assert_difference('Meal.count', -1) do
-      post :destroy, id: @meal
+      delete :destroy, id: @meal
     end
     assert_redirected_to meals_path
     meals_teardown
@@ -68,9 +68,9 @@ class MealsControllerTest < ActionController::TestCase
   test 'should not destroy meal if not creator' do
     meals_setup
     @guest = create(:guest)
-    do_log_in @guest
+    do_login_as @guest
     assert_raise(Pundit::NotAuthorizedError) do
-      post :destroy, id: @meal
+      delete :destroy, id: @meal
     end
     # only redirects when successful
     assert_response :success
@@ -78,20 +78,20 @@ class MealsControllerTest < ActionController::TestCase
   end
 
   test 'should invite other users without duplicates if creator' do
-    do_log_in @user
-    josh = create(:josh)
+    do_login_as @user
+    @user2 = create(:user)
     assert_difference('@meal.invited_users.count', 1) do
-      post :invite, id: @meal, invite: { id: josh.id }
+      post :invite, meal_id: @meal, invite: { id: @user2.id }
     end
-    josh.destroy
+    @user2.destroy
   end
 
   test 'should not invite if not meal creator' do
-    josh = create(:josh)
-    do_log_in josh
+    @user2 = create(:user)
+    do_login_as @user2
     assert_no_difference('@meal.invited_users.count') do
-      post :invite, id: @meal, invite: { id: @user.id }
+      post :invite, meal_id: @meal, invite: { id: @user.id }
     end
-    josh.destroy
+    @user2.destroy
   end
 end

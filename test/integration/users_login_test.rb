@@ -17,7 +17,7 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
 
   test 'login with valid information' do
     get login_path
-    do_log_in(@user, remember_me: '0')
+    do_login_as(@user, remember_me: '0')
     assert_redirected_to @user
     follow_redirect!
     assert_template 'users/show'
@@ -29,7 +29,7 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
 
   test "login with valid information followed by logout" do
     get login_path
-    do_log_in(@user, remember_me: '0')
+    do_login_as(@user, remember_me: '0')
     assert is_logged_in?
     assert_redirected_to @user
     follow_redirect!
@@ -49,12 +49,12 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
   end
 
   test 'login with remembering' do
-    do_log_in(@user, remember_me: '1')
+    do_login_as(@user, remember_me: '1')
     assert_not_nil cookies['remember_token']
   end
 
   test 'login without remembering' do
-    do_log_in(@user, remember_me: '0')
+    do_login_as(@user, remember_me: '0')
     assert_nil cookies['remember_token']
   end
 end

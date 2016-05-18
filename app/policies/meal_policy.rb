@@ -13,7 +13,7 @@ class MealPolicy
   end
 
   def show?
-    scope.where(id: record.id).exists?
+    scope.where(id: meal.id).exists?
   end
 
   def create?
