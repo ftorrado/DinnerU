@@ -22,10 +22,6 @@ class DishesController < ApplicationController
   end
 
   def create
-    # when doing post inside an order
-    return add_to_order unless params[:order_id].nil?
-
-    # regular form post request
     @dish = Dish.new(dish_params)
     authorize @dish
     if @dish.save
@@ -46,9 +42,6 @@ class DishesController < ApplicationController
   end
 
   def destroy
-    # when removing from inside an order
-    return remove_from_order unless params[:order_id].nil?
-
     @dish = Dish.find(params[:id])
     authorize @dish
     @dish.destroy
@@ -59,22 +52,5 @@ class DishesController < ApplicationController
 
     def dish_params
       params.require(:dish).permit(:name, :info)
-    end
-
-    # Called to add a dish to a meal order
-    def add_to_order
-      meal = Meal.find(params[:meal_id])
-      order = meal.orders.find(params[:order_id])
-      dish = Dish.find(params[:id])
-      order.dishes << dish
-      redirect_to meal
-    end
-
-    # Called to remove a dish from a meal order
-    def remove_from_order
-      meal = Meal.find(params[:meal_id])
-      order = meal.orders.find(params[:order_id])
-      order.dishes.delete(params[:id])
-      redirect_to meal
     end
 end

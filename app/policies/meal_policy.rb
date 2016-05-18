@@ -39,7 +39,7 @@ class MealPolicy
   # Permission for placing orders on meals, would not necessarily
   # be the same as the "show?" permission
   def participate?
-    show?
+    !user.nil? && show?
   end
 
   def scope

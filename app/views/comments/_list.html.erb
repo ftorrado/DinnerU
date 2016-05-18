@@ -1,0 +1,11 @@
+<strong>Comments:</strong>
+<br/>
+<% if parent.comments.exists? %>
+  <ul class="list-group">
+    <% parent.comments.each do |comment| %>
+      <li class="list-group-item clearfix">
+        <%= render comment, locals: { parent: parent } %>
+      </li>
+    <% end %>
+  </ul>
+<% end %>

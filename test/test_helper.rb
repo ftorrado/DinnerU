@@ -44,6 +44,7 @@ class ActiveSupport::TestCase
 
     def meals_setup
       @user = create(:user)
+      @user2 = create(:user)
       @meal = create(:meal, user: @user)
       @private_meal = create(:meal, user: @user)
     end
@@ -51,6 +52,7 @@ class ActiveSupport::TestCase
       @meal.destroy
       @private_meal.destroy
       @user.destroy
+      @user2.destroy
     end
 
     def orders_setup

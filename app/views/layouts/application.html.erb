@@ -10,20 +10,22 @@
 
 <div class="container">
   <div class="row">
-    <div class="col-sm-8">
-      <div class="page-header text-center">
-        <h1><%= link_to 'DinnerU', root_path %></h1>
-      </div>
-    </div>
-    <div class="col-sm-4 text-center">
-      <% if logged_in? %>
-        <p><%= link_to 'Profile', current_user,
-                       class: 'btn btn-primary' %></p>
-        <p><%= link_to 'Log out', logout_path, method: 'delete',
-                       class: 'btn btn-primary' %></p>
-      <% else %>
-        <%= link_to 'Log in', login_path, class: 'btn btn-primary' %>
-      <% end %>
+    <div class="page-header text-center clearfix">
+      <span class="pull-right" style="margin-top: -1em">
+        <% if logged_in? %>
+          <p><%= link_to 'Profile', current_user,
+                         class: 'btn btn-default' %></p>
+          <p><%= link_to 'Log out', logout_path, method: 'delete',
+                         class: 'btn btn-primary' %></p>
+        <% else %>
+          <p><%= link_to 'Signup', new_user_path,
+                         class: 'btn btn-default' %></p>
+          <p><%= link_to 'Login', login_path,
+                         class: 'btn btn-primary' %></p>
+        <% end %>
+      </span>
+
+      <h1><%= link_to 'DinnerU', root_path %></h1>
     </div>
   </div>
 
@@ -32,6 +34,7 @@
       <% if Rails.env.development? %>
         <%= debug(params) %>
       <% end %>
+
       <% unless flash.empty? %>
         <% flash.each do |key, value| %>
           <div class="alert alert-<%= key %>">

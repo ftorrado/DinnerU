@@ -18,25 +18,46 @@ class DishesControllerTest < ActionController::TestCase
     assert_template 'dishes/show'
   end
 
-  test 'should get new' do
+  test 'should get new if logged in' do
+    do_login_as @user
     get :new
     assert_response :success
     assert_not_nil assigns(:dish)
     assert_template 'dishes/new'
   end
 
-  test 'should get edit' do
-    get :edit
+  test 'should not get new if not logged in' do
+    assert_raise(Pundit::NotAuthorizedError) do
+      get :new
+    end
+  end
+
+  test 'should get edit if logged in' do
+    do_login_as @user
+    get :edit, id: @dish
     assert_response :success
     assert_not_nil assigns(:dish)
     assert_template 'dishes/edit'
   end
 
-  test 'should create dish' do
+  test 'should not get edit if not logged in' do
+    assert_raise(Pundit::NotAuthorizedError) do
+      get :edit, id: @dish
+    end
+  end
+
+  test 'should create dish if logged in' do
+    do_login_as @user
     assert_difference('Dish.count', 1) do
       post :create, dish: {name: 'tortilla', info: 'corn goodness'}
     end
     assert_redirected_to dish_path(assigns(:dish))
+  end
+
+  test 'should not create dish if not logged in' do
+    assert_raise(Pundit::NotAuthorizedError) do
+      post :create, dish: {name: 'tortilla', info: 'corn goodness'}
+    end
   end
 
   test 'should not accept invalid params' do
@@ -46,37 +67,38 @@ class DishesControllerTest < ActionController::TestCase
     end
   end
 
-  test 'should update dish' do
+  test 'should update dish if logged in' do
+    do_login_as @user
     update = 'new info'
+    assert_not @dish.info == update
     assert_no_difference('Dish.count') do
-      put :update, dish: {name: @dish.name, info: update}
+      put :update, id: @dish, dish: {name: @dish.name, info: update}
     end
     assert assigns(:dish).info == update
     assert_redirected_to dish_path(assigns(:dish))
   end
 
-  test 'should destroy dish' do
+  test 'should not update dish if not logged in' do
+    update = 'new info'
+    assert_not @dish.info == update
+    assert_raise(Pundit::NotAuthorizedError) do
+      put :update, id: @dish, dish: {name: @dish.name, info: update}
+    end
+    assert_not @dish.info == update
+  end
+
+  test 'should destroy dish if logged in' do
+    do_login_as @user
     assert_difference('Dish.count', -1) do
       delete :destroy, id: @dish
     end
     assert_redirected_to dishes_path
   end
 
-  test 'should add dish to order' do
-    orders_setup
-    assert_no_difference('@meal.orders.count') do
-      post :create, meal_id: @meal, order_id: @order, order:
-                             {description: new_description}
+  test 'should not destroy dish if not logged in' do
+    assert_raise(Pundit::NotAuthorizedError) do
+      delete :destroy, id: @dish
     end
-    assert_redirected_to meal_path(assigns(:meal))
-    orders_teardown
-  end
-
-  test 'should remove dish from order' do
-    orders_setup
-    assert_difference('@meal.orders.count', -1) do
-      delete :destroy, meal_id: @meal, id: @order
-    end
-    assert_redirected_to meal_path(assigns(:meal))
+    assert_not_nil Dish.find(@dish)
   end
 end

@@ -25,6 +25,7 @@ class ApplicationPolicy
 
   def update?
     return false if user.nil?
+    return true unless record.has_attribute?(:user)
     record.user == user
   end
 

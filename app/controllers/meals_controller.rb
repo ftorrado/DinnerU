@@ -2,19 +2,22 @@
 # web application +root+
 class MealsController < ApplicationController
   def index
-    @meals = Meal.all.publicly_visible
+    @meals = policy_scope(Meal)
   end
 
   def show
     @meal = Meal.find(params[:id])
+    authorize @meal
   end
 
   def new
     @meal = Meal.new
+    authorize @meal
   end
 
   def edit
     @meal = Meal.find(params[:id])
+    authorize @meal
   end
 
   def create
@@ -44,10 +47,28 @@ class MealsController < ApplicationController
     redirect_to meals_path
   end
 
+  # Invites user into meal
+  def invite
+    @meal = Meal.find(params[:meal_id])
+    authorize @meal, :update?
+    @user = User.find(params[:user_id])
+    @meal.invite_user @user
+    redirect_to @meal
+  end
+
+  # Uninvites user from meal
+  def uninvite
+    @meal = Meal.find(params[:meal_id])
+    authorize @meal, :update?
+    temp_user =  @meal.invited_users.find(params[:user_id])
+    @meal.invited_users.delete(temp_user)
+    redirect_to @meal
+  end
+
   private
 
     def meal_params
-      params.require(:meal).permit(:name, :description, :location,
-                                   :date)
+      params.require(:meal).permit(:name, :description,
+                                   :location, :date)
     end
 end

@@ -50,7 +50,7 @@
     Orders: <small><%= @meal.orders.size %></small>
   </h4>
 
-  <% if policy(@meal).participate? &&
+  <% if policy(@meal).participate?
       !@meal.has_order_from?(current_user) %>
     <div class="well">
       <%= render 'orders/form' %>

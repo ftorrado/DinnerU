@@ -16,33 +16,13 @@
     Nothing found matching the search query
   <% elsif @dishes.size <= 0 %>
     List is still empty
+  <% else %>
+    <ul class="list-group">
+      <% @dishes.each do |dish| %>
+        <li class="list-group-item clearfix">
+          <%= render dish %>
+        </li>
+      <% end %>
+    </ul>
   <% end %>
-
-  <table class="dish-list-item">
-    <% @dishes.each do |dish| %>
-      <tr>
-        <td>
-          <h3><%= link_to dish.name, dish_path(dish)%></h3>
-        </td>
-        <td class="text-center">
-          <span class="fa fa-calendar"></span>
-        </td>
-        <td class="text-center">
-          <span class="fa fa-user"></span>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <span class="fa fa-map-marker"></span>
-          <%= dish.location %>
-        </td>
-        <td>
-          <%= dish.date %>
-        </td>
-        <td>
-          <%= dish.orders.count %>
-        </td>
-      </tr>
-    <% end %>
-  </table>
 </div>

@@ -6,16 +6,13 @@
       </div>
       <div class="panel-body">
         <p>
-          <strong>Dishes:</strong>
-          <%= render partial: 'dishes/list',
-                     locals: { parent: @order } %>
+          <%= render 'dishes/list' %>
         </p>
         <p>
-          <strong>Comments:</strong>
           <%= render partial: 'comments/list',
                      locals: { parent: @order } %>
         </p>
-        <div class="pull-right">
+        <span class="pull-right">
           <%= link_to raw('<i class="glyphicon
                         glyphicon-pencil"></i>'),
                       edit_meal_order_path(@order.meal, @order),
@@ -25,7 +22,7 @@
                       method: :delete,
                       data: { confirm: 'Are you sure?' },
                       class: 'btn btn-sm btn-danger' %>
-        </div>
+        </span>
       </div>
       <div class="panel-footer">
         <%= @order.description %>

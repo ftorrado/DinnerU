@@ -1,0 +1,17 @@
+<%= comment.text %>
+
+<% if comment.user == current_user && !parent.nil? %>
+<span class="pull-right">
+  <% # TODO: find beter way to do this
+    if comment.meal.exists?
+      comment_path = meal_comment_path(parent, comment)
+    else
+      comment_path = meal_order_comment_path(parent.meal, parent,
+                                             comment)
+    end
+  %>
+  <%= link_to 'Remove', comment_path, method: :delete,
+              data: { confirm: 'Are you sure?' },
+              class: 'btn btn-sm btn-danger' %>
+</span>
+<% end %>

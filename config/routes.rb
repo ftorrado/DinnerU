@@ -8,12 +8,13 @@ Rails.application.routes.draw do
 
   resources :users
   resources :meals do
-    post 'invite' => 'meals#invite'
-    post 'uninvite/:user_id' => 'meals#uninvite'
+    post 'invites/:user_id' => 'meals#invite'
+    delete 'invites/:user_id' => 'meals#uninvite'
     resources :comments, only: [:create, :destroy]
     resources :orders do
       resources :comments, only: [:create, :destroy]
-      resources :dishes, only: [:create, :destroy]
+      post 'dishes/:dish_id' => 'orders#add_dish'
+      delete 'dishes/:dish_id' => 'orders#remove_dish'
     end
   end
   resources :dishes

@@ -1,0 +1,14 @@
+<%= dish.name %>
+<span class="pull-right">
+  <%= link_to 'Info', dish_path(dish),
+              class: 'btn btn-sm btn-default' %>
+  <% if !@meal.nil? && !@order.nil? %>
+    <% if @order.user == current_user %>
+      <%= link_to 'Remove',
+                  meal_order_dish_path(@meal, @order, dish),
+                  method: :delete,
+                  data: { confirm: 'Are you sure?' },
+                  class: 'btn btn-sm btn-danger' %>
+    <% end %>
+  <% end %>
+</span>

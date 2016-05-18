@@ -4,6 +4,8 @@ class MealsControllerTest < ActionController::TestCase
   setup :meals_setup
   teardown :meals_teardown
 
+  INVITES_COUNT = 'Meal.find(@meal).invited_users.count'
+
   test 'should get index' do
     get :index
     assert_response :success
@@ -77,21 +79,55 @@ class MealsControllerTest < ActionController::TestCase
     meals_teardown
   end
 
-  test 'should invite other users without duplicates if creator' do
+  test 'should invite unique users if creator' do
     do_login_as @user
-    @user2 = create(:user)
-    assert_difference('@meal.invited_users.count', 1) do
-      post :invite, meal_id: @meal, invite: { id: @user2.id }
+    assert @user == @meal.user
+    assert_nil @meal.invited_users.find(@user2)
+    assert_difference(INVITES_COUNT, 1) do
+      post :invite, meal_id: @meal, user_id: @user2
     end
-    @user2.destroy
+  end
+
+  test 'should not invite duplicate users if creator' do
+    do_login_as @user
+    assert @user == @meal.user
+    @meal.invite_user @user2
+    assert_not_nil @meal.invited_users.find(@user2)
+    assert_no_difference(INVITES_COUNT) do
+      post :invite, meal_id: @meal, user_id: @user2
+    end
   end
 
   test 'should not invite if not meal creator' do
-    @user2 = create(:user)
-    do_login_as @user2
-    assert_no_difference('@meal.invited_users.count') do
-      post :invite, meal_id: @meal, invite: { id: @user.id }
+    @meal.user = @user2
+    @meal.save
+    do_login_as @user
+    assert_not @user == @meal.user
+    assert_nil @meal.invited_users.find(@user2)
+    assert_raise(Pundit::NotAuthorizedError) do
+      post :invite, meal_id: @meal, user_id: @user2
     end
-    @user2.destroy
+  end
+
+  test 'should uninvite users if creator' do
+    do_login_as @user
+    assert @user == @meal.user
+    @meal.invite_user @user2
+    assert_not_nil @meal.invited_users.find(@user2)
+    assert_difference(INVITES_COUNT, -1) do
+      delete :uninvite, meal_id: @meal, user_id: @user2
+    end
+  end
+
+  test 'should not uninvite users if not creator' do
+    @meal.user = @user2
+    @meal.save
+    do_login_as @user
+    assert_not @user == @meal.user
+    @meal.invite_user @user2
+    assert_not_nil @meal.invited_users.find(@user2)
+    assert_raise(Pundit::NotAuthorizedError) do
+      delete :uninvite, meal_id: @meal, user_id: @user2
+    end
   end
 end

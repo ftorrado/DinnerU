@@ -1,0 +1,11 @@
+<strong>Dishes:</strong>
+<br/>
+<% if @order.dishes.exists? %>
+    <ul class="list-group">
+      <% @order.dishes.each do |dish| %>
+          <li class="list-group-item clearfix">
+            <%= render dish %>
+          </li>
+      <% end %>
+    </ul>
+<% end %>
