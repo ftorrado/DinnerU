@@ -19,7 +19,7 @@ class CommentsControllerTest < ActionController::TestCase
     do_login_as @user
     assert_difference(ORDER_COMMENTS_COUNT, 1) do
       post :create, meal_id: @meal, order_id: @order,
-           comment: {text: 'new comment'}
+           text: 'new comment'
     end
     assert_redirected_to meal_path(assigns(:meal))
   end

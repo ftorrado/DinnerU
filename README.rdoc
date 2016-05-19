@@ -22,6 +22,7 @@ embedded object?
 * Images for users and dishes
 * Clear database after tests run (know how to do it on rspec, but
 not using it yet)
+* Shallower data and link structure
 
 === Project info
 

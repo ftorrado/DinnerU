@@ -1,0 +1,5 @@
+<%= form_tag comment_path do %>
+    <%= label_tag 'New comment' %>
+    <%= text_area_tag :text, '', class: 'form-control' %>
+    <%= submit_tag 'Add', class: 'btn btn-primary' %>
+<% end %>

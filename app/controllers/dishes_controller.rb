@@ -1,9 +1,12 @@
-# Controller for the dishes, including actions to manage dishes
-# inside orders.
+# Controller for the dishes
 class DishesController < ApplicationController
   # Filters with Pundit policy and by search query, if any
   def index
     @dishes = policy_scope(Dish).search_by(params[:search])
+    respond_to do |format|
+      format.html
+      format.json { render json: @dishes.as_json }
+    end
   end
 
   def show

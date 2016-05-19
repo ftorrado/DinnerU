@@ -7,13 +7,21 @@ class MealPolicy
     @meal = meal
   end
 
-  # Meals can be hidden so you send the link to the event
   def index?
-    @meals = scope.where(is_visible: true)
+    true
   end
 
   def show?
-    scope.where(id: meal.id).exists?
+    if user.nil?
+      Meal.where(is_private: false)
+        .where(id: meal.id).exists?
+    else
+      Meal.any_of({ is_private: false },
+                  { is_private: true, invited_user_ids: user.id },
+                  { is_private: true, user_id: user.id })
+        .where(id: meal.id).exists?
+    end
+
   end
 
   def create?
@@ -56,11 +64,11 @@ class MealPolicy
 
     def resolve
       if user.nil?
-        scope.where(is_private: false)
+        scope.where(is_visible: true)
       else
-        scope.any_of({ is_private: false },
-                     { is_private: true, invited_users_ids: user.id },
-                     { is_private: true, user_id: user.id })
+        scope.any_of({ is_visible: true },
+                     { is_visible: false, invited_user_ids: user.id },
+                     { is_visible: false, user_id: user.id })
       end
     end
   end

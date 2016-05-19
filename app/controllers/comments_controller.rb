@@ -19,20 +19,17 @@ class CommentsController < ApplicationController
 
   def destroy
     @meal = Meal.find(params[:meal_id])
-    authorize @meal, :participate?
     if params[:order_id]
       # inside order
       @order = @meal.orders.find(params[:order_id])
+      authorize @order, :update?
       @comment = @order.comments.find(params[:id])
-      if @comment.user == current_user
-        @order.comments.delete(@comment)
-      end
+      @order.comments.delete(@comment) if @comment.user == current_user
     else
       # inside meal
+      authorize @meal, :participate?
       @comment = @meal.comments.find(params[:id])
-      if @comment.user == current_user
-        @meal.comments.delete(@comment)
-      end
+      @meal.comments.delete(@comment) if @comment.user == current_user
     end
     redirect_to @meal
   end
@@ -40,6 +37,6 @@ class CommentsController < ApplicationController
   private
 
     def comment_params
-      params.require(:comment).permit(:text)
+      params.permit(:text)
     end
 end

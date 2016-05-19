@@ -5,7 +5,7 @@
   <% if !@meal.nil? && !@order.nil? %>
     <% if @order.user == current_user %>
       <%= link_to 'Remove',
-                  meal_order_dish_path(@meal, @order, dish),
+                  meal_order_rm_dish_path(@meal, @order, dish),
                   method: :delete,
                   data: { confirm: 'Are you sure?' },
                   class: 'btn btn-sm btn-danger' %>

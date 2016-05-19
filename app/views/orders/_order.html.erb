@@ -1,32 +1,57 @@
-<% if !@order.nil? %>
-  <div class="col-lg-4 col-md-6 col-xs-12">
-    <div class="panel panel-info">
-      <div class="panel-heading">
-        <strong>Name:</strong> <%= @order.user.name %>
-      </div>
-      <div class="panel-body">
-        <p>
-          <%= render 'dishes/list' %>
-        </p>
-        <p>
-          <%= render partial: 'comments/list',
-                     locals: { parent: @order } %>
-        </p>
-        <span class="pull-right">
-          <%= link_to raw('<i class="glyphicon
-                        glyphicon-pencil"></i>'),
+<% @order = order unless @order %>
+
+<div class="col-lg-6 col-xs-12">
+  <div class="panel panel-info">
+    <div class="panel-heading">
+      <strong>Name:</strong> <%= @order.user.name %>
+
+      <span class="pull-right">
+        <% if policy(@order).update? %>
+          <%= link_to raw('<i class="glyphicon glyphicon-pencil"></i>'),
                       edit_meal_order_path(@order.meal, @order),
                       class: 'btn btn-sm btn-warning' %>
-          <%= link_to raw('<i class="fa fa-times"></i>'),
+        <% end %>
+        <% if policy(@order).destroy? %>
+          <%= link_to raw('<i class="glyphicon glyphicon-remove"></i>'),
                       [@order.meal, @order],
                       method: :delete,
                       data: { confirm: 'Are you sure?' },
                       class: 'btn btn-sm btn-danger' %>
-        </span>
-      </div>
-      <div class="panel-footer">
-        <%= @order.description %>
-      </div>
+        <% end %>
+      </span>
+    </div>
+    <div class="panel-body">
+      <h4>Dishes:</h4>
+      <br/>
+      <p>
+        <%= render 'dishes/list' %>
+      </p>
+
+      <% if policy(@order).update? %>
+          <p>
+            <%= render 'orders/add_dish_form' %>
+          </p>
+      <% end %>
+      <hr/>
+
+      <h4>Comments:</h4>
+      <br/>
+      <p>
+        <%= render partial: 'comments/list',
+                   locals: { parent: @order } %>
+      </p>
+
+      <% if policy(@meal).participate? %>
+          <p>
+            <%= render partial: 'comments/form',
+                       locals: { comment_path:
+                                     meal_order_comments_path(
+                                         @meal,@order) } %>
+          </p>
+      <% end %>
+    </div>
+    <div class="panel-footer">
+      <%= @order.description %>
     </div>
   </div>
-<% end %>
+</div>

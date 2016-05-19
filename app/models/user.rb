@@ -30,6 +30,14 @@ class User
             uniqueness: { case_sensitive: false }
   validates :password, presence: true, length: { minimum: 6 }
   index({ email: 1 }, { unique: true })
+  index({ name: 1 }, { unique: true })
+
+  scope :search_by, lambda { |search|
+    if search
+      regex_query = /.*#{Regexp.escape(search)}.*/i
+      where('name': { '$regex': regex_query })
+    end
+  }
 
   # Returns the hash digest of the given string.
   def User.digest(string)

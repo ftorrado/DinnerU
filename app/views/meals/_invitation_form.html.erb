@@ -1,22 +1,26 @@
-<% form_tag meal_invite(@meal) do %>
+<%= form_tag meal_invite_path(@meal) do %>
     <p>
       <%= label_tag :email %><br>
-      <%= text_field_tag 'Email', params[:email],
-                         class: 'form-control' %>
+      (Email invites and guest users not implemented)
+      <!--<%= text_field_tag 'Email', params[:email],
+                         class: 'form-control' %>-->
     </p>
 
     <p>
-      <%= label_tag :username %><br>
-      <%= text_field_tag 'User name', params[:username],
+      <%= label_tag :user_name %><br>
+      <%= text_field_tag :user_name, params[:username],
                          class: 'form-control',
                          id: 'username-auto',
                          autocomplete: 'off' %>
       <script type="text/javascript">
         $(function () {
           $('#username-auto').typeahead({
+            minLength: 0, showHintOnFocus: true,
             source: function(query, process) {
               $.get("<%= users_path %>",
-                    query, process, "json")
+                  {search: query},
+                  function(data) {process(data["users"])},
+                  "json")
             }
           });
         });

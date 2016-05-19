@@ -44,6 +44,7 @@ class MealsControllerTest < ActionController::TestCase
   end
 
   test 'should get edit' do
+    do_login_as @user
     get :edit, id: @meal
     assert_response :success
     assert_not_nil assigns(:meal)

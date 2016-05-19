@@ -1,9 +1,9 @@
-<%= form_for([@meal, @meal.orders.build]) do |f| %>
+<%= form_tag meal_orders_path(@meal) do %>
     <p>
-      <%= f.label :description %><br>
-      <%= f.text_area :description, :class => 'form-control' %>
+      <%= label_tag :description %><br>
+      <%= text_area_tag :description, '', :class => 'form-control' %>
     </p>
-    <p class="text-right">
-      <%= f.submit :class => 'btn btn-primary' %>
+    <p>
+      <%= submit_tag 'Start order', :class => 'btn btn-primary' %>
     </p>
 <% end %>

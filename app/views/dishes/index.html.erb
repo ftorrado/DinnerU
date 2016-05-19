@@ -1,9 +1,9 @@
 <div class="btn-group btn-group-justified">
-  <%= link_to raw('<i class="fa fa-plus"></i> New'), new_dish_path,
-              class: 'btn btn-lg btn-default' %>
+  <%= link_to raw('<i class="glyphicon glyphicon-plus"></i> New'),
+              new_dish_path, class: 'btn btn-lg btn-default' %>
 </div>
 
-<% form_tag dishes_path, :method => 'get' do %>
+<%= form_tag dishes_path, :method => 'get' do %>
   <p>
     <%= text_field_tag :search, params[:search],
                        class: 'form-control' %>

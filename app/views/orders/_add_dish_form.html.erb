@@ -1,0 +1,22 @@
+<%= form_tag meal_order_add_dish_path(@meal, @order) do %>
+    <%= label_tag "Add dish (name)" %>
+    <%= text_field_tag :dish_name, params[:dish_name],
+                       class: 'form-control',
+                       id: 'dishname-auto',
+                       autocomplete: 'off' %>
+    <%= submit_tag 'Add', class: 'btn btn-primary' %>
+
+    <script type="text/javascript">
+      $(function () {
+        $('#dishname-auto').typeahead({
+          minLength: 0, showHintOnFocus: true,
+          source: function(query, process) {
+            $.get("<%= dishes_path %>",
+                {search: query},
+                function(data) {process(data["dishes"])},
+                "json")
+          }
+        });
+      });
+    </script>
+<% end %>

@@ -67,7 +67,11 @@ class OrdersController < ApplicationController
     @meal = Meal.find(params[:meal_id])
     @order = @meal.orders.find(params[:order_id])
     authorize @order, :update?
-    @dish = Dish.find(params[:dish_id])
+    if params[:dish_id]
+      @dish = Dish.find(params[:dish_id])
+    else
+      @dish = Dish.find_by(name: params[:dish_name])
+    end
     @order.dishes << @dish
     @order.save
     redirect_to [@meal, @order]

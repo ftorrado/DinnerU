@@ -1,0 +1,16 @@
+AllCops:
+  Exclude:
+    - '.idea/**/*'
+    - 'bin/**/*'
+    - 'config/**/*'
+    - 'db/**/*'
+    - 'doc/**/*'
+    - 'log/**/*'
+    - 'test/**/*'
+    - 'tmp/**/*'
+    - 'vendor/**/*'
+  TargetRubyVersion: 2.2
+
+Style/Encoding:
+  EnforcedStyle: when_needed
+  Enabled: true

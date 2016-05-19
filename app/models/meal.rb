@@ -12,7 +12,7 @@ class Meal
   field :name, type: String
   field :description, type: String
   field :location, type: String
-  field :date, type: DateTime, default: DateTime.new
+  field :date, type: DateTime, default: DateTime.current
   field :is_visible, type: Boolean, default: false
   field :is_private, type: Boolean, default: false
 
@@ -20,6 +20,14 @@ class Meal
   validates :name, presence: true, length: { minimum: 5, maximum: 60 }
   validates :description, length: { maximum: 120 }
   validates :location, length: { maximum: 120 }
+
+  def set_date value
+    begin
+      self.date = DateTime.strptime(value, '%m/%d/%Y %H:%M %p')
+    rescue
+      # default value
+    end
+  end
 
   scope :publicly_visible, lambda {
     where(is_visible: true)

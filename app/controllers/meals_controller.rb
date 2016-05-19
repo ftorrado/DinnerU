@@ -23,6 +23,7 @@ class MealsController < ApplicationController
   def create
     @meal = Meal.new(meal_params)
     authorize @meal
+    @meal.set_date params[:meal][:date] if params[:meal][:date]
     @meal.user = current_user
     if @meal.save
       redirect_to @meal
@@ -51,7 +52,11 @@ class MealsController < ApplicationController
   def invite
     @meal = Meal.find(params[:meal_id])
     authorize @meal, :update?
-    @user = User.find(params[:user_id])
+    @user = if params[:user_id]
+              User.find(params[:user_id])
+            else
+              User.find_by(name: params[:user_name])
+            end
     @meal.invite_user @user
     redirect_to @meal
   end
