@@ -10,7 +10,7 @@ class CommentsControllerTest < ActionController::TestCase
   test 'should create comment on meal' do
     do_login_as @user
     assert_difference(MEAL_COMMENTS_COUNT, 1) do
-      post :create, meal_id: @meal, comment: {text: 'this comment'}
+      post :create, meal_id: @meal, text: 'this comment'
     end
     assert_redirected_to meal_path(assigns(:meal))
   end
@@ -29,7 +29,7 @@ class CommentsControllerTest < ActionController::TestCase
     @private_meal = create(:private_meal, user: @user2)
     do_login_as @user
     assert_raise(Pundit::NotAuthorizedError) do
-      post :create, meal_id: @private_meal, comment: {text: 'new'}
+      post :create, meal_id: @private_meal, text: 'new'
     end
     @private_meal.destroy
     @user2.destroy

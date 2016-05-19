@@ -21,6 +21,7 @@ class MealsControllerTest < ActionController::TestCase
   end
 
   test 'should get new' do
+    do_login_as @user
     get :new
     assert_response :success
     assert_not_nil assigns(:meal)
