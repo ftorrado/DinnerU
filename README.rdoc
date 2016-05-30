@@ -1,27 +1,18 @@
 == DinnerU
 
-Small application to schedule meals and plan in advance what you will
-order to eat!
+Small application to schedule meals and plan in advance what you will order to eat!
 
 === TODO
 
-* Invites to meals via email with unique token, registering new
-emails as guest users. Using own data model for Invitation.
-* Should do proper email confirmation, probably using the "Devise"
- gem, no reason to do it manually
+* Invites to meals via email with unique token, registering new emails as guest users. Using own data model for Invitation.
+* Should do proper email confirmation, probably using the "Devise" gem, no reason to do it manually
 * Usage of guest users (removed feature)
-* Testing the "Pundit" authorization rules should be done seperatly
- as integration tests or is fine to do it on controller tests?
- (pundit/rspec)
-* Missing authorization rules for Orders, should have it even as
-embedded object?
+* Testing the "Pundit" authorization rules should be done seperatly as integration tests or is fine to do it on controller tests? (pundit/rspec)
+* Missing authorization rules for Orders, should have it even as embedded object?
 * At least +Meal+ and +Dish+ indexes should have pagination
-* Passing variables to partial views is sketchy and not consistent,
- how to manage having different possible parent models like in the
- case of comments?
+* Passing variables to partial views is sketchy and not consistent, how to manage having different possible parent models like in the case of comments?
 * Images for users and dishes
-* Clear database after tests run (know how to do it on rspec, but
-not using it yet)
+* Clear database after tests run (know how to do it on rspec, but not using it yet)
 * Shallower data and link structure
 
 === Project info
