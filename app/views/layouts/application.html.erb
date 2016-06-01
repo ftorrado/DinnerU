@@ -31,6 +31,19 @@
 
   <div class="row">
     <div class="col-md-8 col-md-offset-2">
+      <ul id="mainNav" class="nav nav-pills nav-justified">
+        <li role="presentation" data-section="meals"
+            class="<%= active_if_section('meals', yield(:section)) %>">
+          <a href="#">Meals</a></li>
+        <li role="presentation" data-section="dishes"
+            class="<%= active_if_section('dishes', yield(:section)) %>">
+          <a href="#">Dishes</a></li>
+        <li role="presentation" data-section="users"
+            class="<%= active_if_section('users', yield(:section)) %>">
+          <a href="#">Users</a></li>
+      </ul>
+      <br/>
+
       <% if Rails.env.development? %>
         <%= debug(params) %>
       <% end %>

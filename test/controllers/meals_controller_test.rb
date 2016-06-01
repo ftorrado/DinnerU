@@ -6,6 +6,12 @@ class MealsControllerTest < ActionController::TestCase
 
   INVITES_COUNT = 'Meal.find(@meal).invited_users.count'
 
+  check_navigation_section do
+    assert_select '#mainNav' do
+      assert_select 'li[data-section=meals].active'
+    end
+  end
+
   test 'should get index' do
     get :index
     assert_response :success

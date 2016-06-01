@@ -55,18 +55,6 @@ function setupFormAsync ($form, onSuccess, onFail, beforeSubmit, beforeSubmitDat
     });
 }
 
-function scriptRunner (elementId) {
-    //var arr = document.getElementById('sidebar-panel').getElementsByTagName('script');
-    var arr = document.getElementById(elementId).getElementsByTagName('script');
-    console.log("Running " + arr.length + " scripts from #" + elementId);
-    for (var n = 0; n < arr.length; n++) {
-        eval(arr[n].innerHTML);
-    }
-}
-
-
-// Utils
-
 /**
  * Checks if given object is a DOM element
  * @see http://stackoverflow.com/a/28287642
@@ -123,38 +111,4 @@ function getCookie(cname) {
         if (c.indexOf(name) != -1) return c.substring(name.length,c.length);
     }
     return "";
-} 
-
-/**
- * Convert to hexadecimal
- */
-function componentToHex(c) {
-    var hex = c.toString(16);
-    return hex.length == 1 ? "0" + hex : hex;
-}
-/**
- * convert color to hexadecimal format
- */
-function rgbToHex(opacity, r, g, b) {
-    if(opacity != null)
-        return "#" + componentToHex(opacity) + componentToHex(r) + componentToHex(g) + componentToHex(b);
-    else
-        return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
-}
-
-// By Tim Down: http://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb
-// accepts formats #03F and #0033FF
-function hexToRgb(hex) {
-    // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
-    var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
-    hex = hex.replace(shorthandRegex, function(m, r, g, b) {
-        return r + r + g + g + b + b;
-    });
-
-    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    return result ? {
-        r: parseInt(result[1], 16),
-        g: parseInt(result[2], 16),
-        b: parseInt(result[3], 16)
-    } : null;
 }

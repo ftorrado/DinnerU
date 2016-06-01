@@ -9,7 +9,12 @@
 
     <p>
       <%= f.label :location %><br>
-      <%= f.text_field :location, :class => 'form-control' %>
+      <%= f.text_field :location, class: 'form-control', id: 'location' %>
+
+      <button type="button" class="btn btn-primary"
+              data-toggle="modal" data-target="#locationModal">
+        Pick location
+      </button>
     </p>
 
     <p>
@@ -43,3 +48,68 @@
       </div>
     </p>
 <% end %>
+
+<div class="modal fade" id="locationModal" tabindex="-1"
+     role="dialog" aria-labelledby="locationModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title" id="locationModalLabel">Select a location</h4>
+      </div>
+      <div class="modal-body">
+
+        <p>
+          Location:
+          <input type="text" id="mapComponent-address"/>
+        </p>
+        <div id="mapComponent"></div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">
+          Cancel
+        </button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal"
+                id="locationModal-save">
+          Select
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  var locationpickerOpts = {
+    radius: 200,
+    enableAutocomplete: true,
+    inputBinding: {
+      locationNameInput: $('#mapComponent-address')
+    }
+  };
+
+  if(!!navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      locationpickerOpts.location = {
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude
+      };
+    });
+  } else {
+    alert('No Geolocation Support.');
+  }
+
+  $('#mapComponent').locationpicker(locationpickerOpts);
+
+  $('#locationModal').on('shown.bs.modal', function () {
+    $('#mapComponent').locationpicker('autosize');
+  });
+
+  $('#locationModal-save').on('click', function () {
+    $pickerInput = $('#mapComponent-address');
+    if (isDomElemJQuery($pickerInput) && isset($pickerInput.val()))
+      $('#location').val($pickerInput.val());
+  });
+</script>
