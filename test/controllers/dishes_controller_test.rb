@@ -4,6 +4,12 @@ class DishesControllerTest < ActionController::TestCase
   setup :dishes_setup
   teardown :dishes_teardown
 
+  check_navigation_section do
+    assert_select '#mainNav' do
+      assert_select 'li[data-section=dishes].active'
+    end
+  end
+
   test 'should get index' do
     get :index
     assert_response :success
