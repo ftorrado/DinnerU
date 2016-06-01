@@ -17,4 +17,5 @@
 //= require moment
 //= require bootstrap-datetimepicker
 //= require bootstrap3-typeahead
+//= require locationpicker.jquery
 //= require_tree .

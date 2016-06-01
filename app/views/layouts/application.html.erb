@@ -34,13 +34,13 @@
       <ul id="mainNav" class="nav nav-pills nav-justified">
         <li role="presentation" data-section="meals"
             class="<%= active_if_section('meals', yield(:section)) %>">
-          <a href="#">Meals</a></li>
+          <%= link_to 'Meals', meals_path %></li>
         <li role="presentation" data-section="dishes"
             class="<%= active_if_section('dishes', yield(:section)) %>">
-          <a href="#">Dishes</a></li>
+          <%= link_to 'Dishes', dishes_path %></li>
         <li role="presentation" data-section="users"
             class="<%= active_if_section('users', yield(:section)) %>">
-          <a href="#">Users</a></li>
+          <%= link_to 'Users', users_path %></li>
       </ul>
       <br/>
 

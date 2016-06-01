@@ -61,11 +61,17 @@
       </div>
       <div class="modal-body">
 
-        <p>
-          Location:
-          <input type="text" id="mapComponent-address"/>
-        </p>
-        <div id="mapComponent"></div>
+        <div class="form-horizontal" style="width: 550px">
+          <div class="form-group">
+            <label class="col-sm-2 control-label">Location:</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="mapComponent-address"
+                     placeholder="Enter a location" autocomplete="off">
+            </div>
+          </div>
+
+          <div id="mapComponent" style="width: 100%; height: 500px;"></div>
+        </div>
 
       </div>
       <div class="modal-footer">
@@ -81,6 +87,7 @@
   </div>
 </div>
 
+<script type="text/javascript" src='http://maps.google.com/maps/api/js?sensor=false&libraries=places'></script>
 <script>
   var locationpickerOpts = {
     radius: 200,
@@ -91,19 +98,22 @@
   };
 
   if(!!navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(function(position) {
+    var position = navigator.geolocation.getCurrentPosition(function(position) {
       locationpickerOpts.location = {
         latitude: position.coords.latitude,
         longitude: position.coords.longitude
       };
+      console.log(locationpickerOpts);
+      $('#mapComponent').locationpicker(locationpickerOpts);
     });
   } else {
     alert('No Geolocation Support.');
+    $('#mapComponent').locationpicker(locationpickerOpts);
   }
 
-  $('#mapComponent').locationpicker(locationpickerOpts);
 
   $('#locationModal').on('shown.bs.modal', function () {
+    console.log("fitting to modal");
     $('#mapComponent').locationpicker('autosize');
   });
 
