@@ -67,7 +67,7 @@
       </div>
       <div class="modal-body">
 
-        <div class="form-horizontal" style="width: 550px">
+        <div class="form-horizontal" style="max-width: 550px">
           <div class="form-group">
             <label class="col-sm-2 control-label">Location:</label>
             <div class="col-sm-10">
@@ -105,21 +105,15 @@
       </div>
       <div class="modal-body">
 
+        <%= render 'shared/zomato_form' %>
+
         <!-- Zomato widget - https://developers.zomato.com/widgets -->
-        <div class="widget_wrap" style="width:520px;height:504px;display:inline-block;">
-          <iframe src="https://www.zomato.com/widgets/res_search_widget.php?language_id=1&theme=red&widgetType=large&sort=popularity"
-                  style="position:relative;width:100%;height:100%;"
-                  border="0" frameborder="0"></iframe>
-        </div>
+        <div id="widgetContainer"></div>
 
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">
           Cancel
-        </button>
-        <button type="button" class="btn btn-primary" data-dismiss="modal"
-                id="restaurantModal-save">
-          Select
         </button>
       </div>
     </div>
@@ -136,6 +130,7 @@
     }
   };
 
+  // getting user location
   if(!!navigator.geolocation) {
     var position = navigator.geolocation.getCurrentPosition(function(position) {
       locationpickerOpts.location = {
@@ -150,7 +145,7 @@
     $('#mapComponent').locationpicker(locationpickerOpts);
   }
 
-
+  // Google Maps address picker
   $('#locationModal').on('shown.bs.modal', function () {
     console.log("fitting to modal");
     $('#mapComponent').locationpicker('autosize');
@@ -161,4 +156,40 @@
     if (isDomElemJQuery($pickerInput) && isset($pickerInput.val()))
       $('#location').val($pickerInput.val());
   });
+
+  // Zomato restaurant picker
+  $.get('<%= zomato_search_path %>', function(data) {
+    var $container = $('#widgetContainer');
+    var $data = $(data).not('script');
+    var $scripts = $(data).filter('script');
+
+//    console.log($data.filter('script'));
+//    $data.filter('script').each(function() {
+//      console.log(this, $(this).clone());
+//      $scripts.add($(this).clone());
+//    });
+//    $data.remove('script');
+//    console.log($data);
+//    console.log($scripts);
+//
+//    $container.html($data);
+//    $scripts.each(function() {
+//      console.log(this.text, $(this).text);
+//      eval(this.text);
+//    });
+//    var responseScript = data.filter("script");
+//    jQuery.each(responseScript, function(idx, val) { eval(val.text); } );
+
+    document.getElementById("widgetContainer").innerHTML = data;
+    $container.find('script').each(function () {
+      eval(this.text);
+    });
+
+    $container.find('div.res a').on('click', function (event) {
+      event.preventDefault();
+      // Use the text inside the link, the restaurant, as the location
+      $('#location').val(this.text());
+    });
+    console.log('Loaded Zomato widget');
+  }, 'html');
 </script>
