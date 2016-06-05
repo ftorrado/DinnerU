@@ -1,0 +1,75 @@
+<% if @result.empty? || @result.results_found == 0 %>
+  <div class='clearfix res'>No results found</div>
+<% else %>
+  <% @result.restaurants.each do |restaurantContainer| %>
+    <% restaurant = restaurantContainer.restaurant %>
+    <% next unless restaurant.id #skip when there is no id %>
+    <div class='clearfix res'>
+      <div class='left'>
+        <div class='left res_img'>
+          <img src='<%=
+            restaurant.thumb if restaurant.thumb
+            restaurant.featuredImage if restaurant.featuredImage
+            restaurant.photos[0].photo.thumbUrl if restaurant.photos.length
+            'https://b.zmtcdn.com/images/photoback.png' %>' />
+        </div>
+        <div class='left res_info'>
+          <a target='_blank' class='res_name'
+             href='http://zoma.to/r/<%= restaurant.id %>'>
+            <span><%= restaurant.name %></span>
+          </a>
+          <div class='res_loc'><%= restaurant.location.locality %></div>
+          <div class='res_type_wrap'>
+            <span class='res_type'><%=
+              if restaurant.establishmentTypes && restaurant.establishmentTypes.length > 0
+                restaurant.establishmentTypes[0].establishment_type.name + ': '
+              end
+            %></span>
+            <span class='res_cuisines'><%= restaurant['cuisines'] %></span>
+          </div>
+        </div>
+      </div>
+      <div class='rating right' style='background-color:#<%=
+        restaurant.userRating.rating_color %>'>
+        <%= restaurant.userRating.rating_display %>
+      </div>
+      <div class='clear'></div>
+    </div>
+  <% end %>
+
+  <div class='clear'>
+    <a target='_blank' href='<%= url_full_list(params) %>' class='see_all'>
+      <% if @result.results_shown < @result.results_found %>
+        See more
+      <% else %>
+        See all
+      <% end %>
+    </a>
+  </div>
+<% end %>
+
+<script>
+  $(document).ready(function() {
+    var selectRestaurant = function () {
+      restaurantName = $(this).text();
+      $('#zomatoRestaurant').html(restaurantName);
+      $('#location').val(restaurantName);
+    };
+
+    $('.res_name').on('click', selectRestaurant);
+
+    if (entity_id == 0) {
+      entity_id = <%= params[:entity_id] %>;
+      entity_type = '<%= params[:entity_type] %>';
+    }
+    $('.res_info').width($('.res_info').parent().width() - $('.res_img').width());
+    if (res['heading'] && res.heading != '') {
+      $('.no_search_txt>span').html(res.heading);
+    }
+    if (res['search_title'] && res.search_title != '') {
+      $('.popular_search').html(res.search_title + "<span class='sort-text'>" + res['sort_text'] + "</span>");
+    }
+    $('a:not(.powered_by)').removeClass('theme-red-foreground, theme-dark-foreground').addClass('theme-red-foreground');
+    $('button').removeClass('theme-red-background, theme-dark-background').addClass('theme-red-background');
+  });
+</script>

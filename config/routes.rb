@@ -6,6 +6,9 @@ Rails.application.routes.draw do
   post   'login'   => 'sessions#create'
   delete 'logout'  => 'sessions#destroy'
 
+  get 'zomato/locations' => 'zomato#locations'
+  get 'zomato/restaurants' => 'zomato#restaurants'
+
   resources :users
   resources :meals do
     post 'invites' => 'meals#invite', as: :invite
