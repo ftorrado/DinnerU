@@ -105,7 +105,7 @@
       </div>
       <div class="modal-body">
 
-        <div id="zomatoSearch">
+        <div id="zomatoComponent">
           <%= render 'zomato/search_form' %>
         </div>
 
@@ -155,7 +155,12 @@
       $('#location').val($pickerInput.val());
   });
 
-  $('#zomatoSearch .res').on('click', function () {
+  // Zomato restaurant picker
+  $('#zomatoComponent').on('shown.bs.modal', function () {
+    $('#zomatoCity').focus();
+  });
+
+  $('#zomatoComponent .res').on('click', function () {
     $('#location').val($(this).find('.res_name').text());
   });
 </script>

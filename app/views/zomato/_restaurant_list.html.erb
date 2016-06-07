@@ -1,28 +1,28 @@
-<% if @result.empty? || @result.results_found == 0 %>
+<% if @restaurants.nil? || @restaurants['results_found'] == 0 %>
   <div class='clearfix res'>No results found</div>
 <% else %>
-  <% @result.restaurants.each do |restaurantContainer| %>
-    <% restaurant = restaurantContainer.restaurant %>
-    <% next unless restaurant.id #skip when there is no id %>
+  <% @restaurants['restaurants'].each do |restaurantContainer| %>
+    <% restaurant = restaurantContainer['restaurant'] %>
+    <% next unless restaurant['id'] #skip when there is no id %>
     <div class='clearfix res'>
       <div class='left'>
         <div class='left res_img'>
           <img src='<%=
-            restaurant.thumb if restaurant.thumb
-            restaurant.featuredImage if restaurant.featuredImage
-            restaurant.photos[0].photo.thumbUrl if restaurant.photos.length
+            restaurant['thumb'] if restaurant['thumb']
+            restaurant['featuredImage'] if restaurant['featuredImage']
+            restaurant['photos'][0]['photo']['thumbUrl'] if restaurant['photos'].present?
             'https://b.zmtcdn.com/images/photoback.png' %>' />
         </div>
         <div class='left res_info'>
           <a target='_blank' class='res_name'
-             href='http://zoma.to/r/<%= restaurant.id %>'>
-            <span><%= restaurant.name %></span>
+             href='http://zoma.to/r/<%= restaurant['id'] %>'>
+            <span><%= restaurant['name'] %></span>
           </a>
-          <div class='res_loc'><%= restaurant.location.locality %></div>
+          <div class='res_loc'><%= restaurant['location']['locality'] %></div>
           <div class='res_type_wrap'>
             <span class='res_type'><%=
-              if restaurant.establishmentTypes && restaurant.establishmentTypes.length > 0
-                restaurant.establishmentTypes[0].establishment_type.name + ': '
+              if restaurant['establishmentTypes'] && restaurant['establishmentTypes'].present?
+                restaurant['establishmentTypes'][0]['establishment_type']['name'] + ': '
               end
             %></span>
             <span class='res_cuisines'><%= restaurant['cuisines'] %></span>
@@ -30,8 +30,8 @@
         </div>
       </div>
       <div class='rating right' style='background-color:#<%=
-        restaurant.userRating.rating_color %>'>
-        <%= restaurant.userRating.rating_display %>
+        restaurant['user_rating']['rating_color'] %>'>
+        <%= restaurant['user_rating']['rating_display'] %>
       </div>
       <div class='clear'></div>
     </div>
@@ -39,7 +39,7 @@
 
   <div class='clear'>
     <a target='_blank' href='<%= url_full_list(params) %>' class='see_all'>
-      <% if @result.results_shown < @result.results_found %>
+      <% if @restaurants['results_shown'] < @restaurants['results_found'] %>
         See more
       <% else %>
         See all

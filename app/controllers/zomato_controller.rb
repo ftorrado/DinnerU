@@ -6,23 +6,25 @@ class ZomatoController < ApplicationController
   def locations
     request_params = { query: params[:q] }
     if params[:lat] && params[:lon]
-      request_params.merge(lat: params[:lat], lon: params[:lon])
+      request_params.merge!(lat: params[:lat], lon: params[:lon])
     end
-    api_get_request 'locations', request_params
+    req_result = api_get_request 'locations', request_params
+    @locations = JSON.parse(req_result)
+    respond_to do |format|
+      format.json { render json: req_result }
+    end
   end
 
   def restaurants
     request_params = { query: params[:q] }
     if params[:city_id]
-      request_params.merge(entity_id: params[:city_id], entity_type: 'city')
+      request_params.merge!(entity_id: params[:city_id], entity_type: 'city')
     end
-    @result = api_get_request 'restaurants', request_params
-
-    if response.is_a? Net::HTTPSuccess
-      respond_to do |format|
-        format.html { render '_restaurant_list' }
-        format.json { render json: @restaurants }
-      end
+    req_result = api_get_request 'search', request_params
+    @restaurants = JSON.parse(req_result)
+    respond_to do |format|
+      format.html { render '_restaurant_list' }
+      format.json { render json: req_result }
     end
   end
 

@@ -6,9 +6,6 @@ Rails.application.routes.draw do
   post   'login'   => 'sessions#create'
   delete 'logout'  => 'sessions#destroy'
 
-  get 'zomato/locations' => 'zomato#locations'
-  get 'zomato/restaurants' => 'zomato#restaurants'
-
   resources :users
   resources :meals do
     post 'invites' => 'meals#invite', as: :invite
@@ -21,6 +18,11 @@ Rails.application.routes.draw do
     end
   end
   resources :dishes
+
+  scope 'zomato/' do
+    get 'locations' => 'zomato#locations'
+    get 'restaurants' => 'zomato#restaurants'
+  end
 
   # mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
 end

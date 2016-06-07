@@ -1,3 +1,321 @@
 // Place all the styles related to the zomato controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+#zomatoComponent {
+  * {
+    outline: 0;
+    margin: 0;
+    padding: 0;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+  html, body {
+    font-family: "Helvetica Neue", "Helvetica", "Calibri", Arial, sans-serif;
+    font-size: 14px;
+    color: #2d2d2d;
+  }
+  a {
+    text-decoration: none;
+    color: #cb202d;
+  }
+  a:hover {text-decoration: underline;}
+  .clearfix:after,.clearfix:before {
+    content: " ";
+    display: table
+  }
+  .clearfix:after { clear: both }
+  .clearfix {*zoom:1}
+  .clear { clear:both }
+  .left { float: left }
+  .right { float: right }
+
+  .res_search_widget {
+    background: #fff;
+    border: 1px solid #e4e4e4;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    position: relative;
+  }
+  .res_search_header p {
+    margin: 10px 10px 8px;
+  }
+  .search_box_wrap {
+    padding: 0 10px;
+  }
+  .popular_search {
+    background: #f4f4f4;
+    border-bottom: 1px solid #e4e4e4;
+    margin-top: 10px;
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+  #res_results {
+    overflow-x: hidden;
+    overflow-y: scroll;
+    padding-top: 5px;
+    min-height: 49px;
+  }
+  .res {
+    padding: 10px;
+    margin-bottom: 5px;
+    border-bottom: 1px solid #e4e4e4;
+    width: 100%;
+    vertical-align: top;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+  .res:last-child {
+    border-bottom: 0px solid #e4e4e4;
+    line-height: 19px;
+  }
+  .res > .left {
+    display: table-cell;
+    vertical-align: top;
+    width: 85%;
+  }
+  .res_img {
+    display: table-cell;
+    width: 50px;
+  }
+  .res_img img {
+    width: 40px;
+    height: 40px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+  }
+  .res_info {
+    display: table-cell;
+    vertical-align: top;
+    width: 80%;
+  }
+  .res_name {
+    display: block;
+    font-size: 16px;
+    line-height: 18px;
+    margin-bottom: 4px;
+    font-weight: bold;
+  }
+  .res_loc, .res_type, .res_cuisines { line-height: 22px; }
+  .res_loc, .res_cuisines {color: #9a9a9a}
+  .res_type_wrap {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  .rating {
+    color: #fff;
+    cursor: default;
+    border-radius: 5px;
+    font-size: 14px;
+    width: 34px;
+    line-height: 26px;
+    text-align: center;
+    margin: 0 auto;
+  }
+  .see_all {
+    display: block;
+    text-align: center;
+    padding: 6px 10px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+  .res_search_footer {
+    background: #f4f4f4;
+    border-top: 1px solid #e4e4e4;
+    text-align: center;
+    padding: 10px;
+    font-size: 12px;
+    -webkit-border-bottom-left-radius: 5px;
+    -webkit-border-bottom-right-radius: 5px;
+    -moz-border-bottom-left-radius: 5px;
+    -moz-border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+  }
+  .res_search_footer img {
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    float: none;
+    margin: 0 6px -4px 0;
+  }
+  .res_search_footer a {
+    color: #2d2d2d;
+    text-decoration: none;
+  }
+
+  .city_select {
+    position: relative;
+  }
+  #city_results {
+    background: #fff;
+    border: 1px solid #e4e4e4;
+    font-size: 12px;
+    position: absolute;
+    top: 35px;
+    width: 100%;
+    margin-left: 1px;
+    list-style: none;
+    min-width: 150px;
+  }
+  #city_results li {
+    border-bottom: 1px solid #e4e4e4;
+    padding: 10px;
+    cursor: pointer;
+  }
+  #city_results li:last-child {
+    border: 0;
+  }
+  .item.selected {
+    background: #FBEED5;
+  }
+  #city_input, #search_input {
+    font-size: 12px;
+    border: 1px solid #e4e4e4;
+    padding: 10px 10px 10px 27px;
+    margin: 0;
+    float: left;
+    width: 100%;
+    background-repeat: no-repeat;
+    background-position: 7px center;
+    background-size: 15px auto;
+  }
+  #city_input {
+    background-image : url("https://b.zmtcdn.com/images/widgets/location.png");
+    border-right: 0;
+    border-bottom-left-radius: 5px;
+    border-top-left-radius: 5px;	}
+  #search_input {
+    background-image : url("https://b.zmtcdn.com/images/widgets/search.png");
+  }
+  #searchBtn {
+    background: #cb202d;
+    font-size: 12px;
+    color: #fff;
+    padding: 11px;
+    margin: 0;
+    border: 0;
+    float: left;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    width: 100%;
+    border-bottom-right-radius: 5px;
+    border-top-right-radius: 5px;	}
+  .search_box_wrap {
+    width: 100%;
+    display: table;
+    vertical-align: top;
+  }
+  .city_select {
+    display: table-cell;
+    vertical-align: top;
+    width: 33%;
+  }
+  .search_box {
+    display: table-cell;
+    vertical-align: top;
+    width: 60%;
+  }
+  .search_btn {
+    display: table-cell;
+    vertical-align: top;
+    width: 15%;
+  }
+  .search_box_wrap.no_city .search_box {
+    width: 77%;
+  }
+  #loading {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(255,255,255,0.4);
+    text-align: center;
+    z-index: 10;
+  }
+  #loading img {
+    position: absolute;
+    top: 50%;
+    margin-top: -6px;
+    margin-left: -21px;
+  }
+  .vertical_widget .city_select, .vertical_widget .search_box, .vertical_widget .search_btn {
+    display: block !important;
+    width: 100% !important;
+    margin-bottom: 8px !important;
+  }
+  .vertical_widget .search_btn {
+    margin-bottom: 4px !important
+  }
+  .vertical_widget #city_input, .vertical_widget #search_input{
+    border: 1px solid #e4e4e4 !important;
+    width: 100% !important;
+  }
+
+  .no_search {
+    background: #f4f4f4;
+    border-top: 1px solid #e4e4e4;
+    padding: 9px 10px 10px;
+    -webkit-border-top-left-radius: 5px;
+    -webkit-border-top-right-radius: 5px;
+    -moz-border-top-left-radius: 5px;
+    -moz-border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+  }
+  .no_search_txt {
+    font-size: 12px;
+    text-transform: uppercase;
+    margin-left: 10px;
+  }
+  .no_search_txt span {
+    display: block;
+    color: #767676;
+    font-size: 16px;
+    text-transform: none;
+    margin-top: 2px;
+  }
+  .no_search_txt > span {
+    display: block;
+    font-size: 1.1em;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    color: #9a9a9a;
+  }
+  .no_city_name {
+    line-height: 35px;
+  }
+  .icon-img {
+    margin: 5px 5px 0px;
+  }
+  .sort-text {
+    display: block;
+    font-size: .8em;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    margin: 6px 0 0px;
+    color: #9a9a9a;
+  }
+  .theme-red-foreground {
+    color: #cb202d !important;
+  }
+  .theme-dark-foreground {
+    color: #2d2d2d !important;
+  }
+  .theme-red-background {
+    background-color: #cb202d !important;
+  }
+  .theme-dark-background {
+    background-color: #2d2d2d !important;
+  }
+  .theme-dark-background:hover {
+    background-color: #000 !important;
+  }
+}

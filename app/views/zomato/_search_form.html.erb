@@ -28,7 +28,7 @@
 
 <script>
   var request_params = JSON.parse('{"sort":"pd","language_id":1}');
-  var city_typeahead;
+  var city_typeahead, search_timer = null;
 
   $(document).ready(function() {
     // Some code from Zomato widget
@@ -57,12 +57,9 @@
         $('.search_txt>span').html('Restaurants Nearby');
       }
       res_xhr = $.ajax({
-        url: '/zomato/restaurants',
-        datatype: 'html',
-        data: searchData,
-        success: function (res) {
-          $('#res_results').html(res);
-        }
+        url: '<%= url_for controller: 'zomato', action: 'restaurants', format: :js %>',
+        datatype: 'script',
+        data: searchData
       });
     };
 
@@ -86,7 +83,7 @@
         data_params['lon'] = currentPosition.longitude;
       }
       city_suggestion_xhr = $.ajax({
-        url: '/zomato/locations',
+        url: '/zomato/locations.json',
         dataType: 'json',
         data: data_params,
         success: function (cities) {
@@ -107,8 +104,19 @@
     });
 
     // Do search if the user position is available
-    if (!!currentPosition) {
-      city_typeahead.lookup('');
-    }
+    setTimeout(function () {
+      if (!!currentPosition) {
+        city_typeahead.lookup('');
+      }
+    }, 2000);
+    search_timer = setTimeout(resSearch, 2000);
+
+    $("#zomatoSearch").keyup(function () {
+      if (search_timer != null) {
+        clearTimeout(search_timer);
+        search_timer = null;
+      }
+      search_timer = setTimeout(resSearch, 500);
+    });
   });
 </script>
