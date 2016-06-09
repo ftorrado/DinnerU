@@ -18,7 +18,7 @@
         Pick an address
       </button>
       <button type="button" class="btn btn-info"
-              data-toggle="modal" data-target="#restaurantModal">
+              data-toggle="modal" data-target="#zomatoModal">
         Pick a restaurant
       </button>
     </div>
@@ -156,12 +156,12 @@
   });
 
   // Zomato restaurant picker
-  $('#zomatoModal').on('shown.bs.modal', function () {
-    if ($('#zomatoCity').val().trim() == '')
-      $('#zomatoCity').focus();
-    else
-      $('#zomatoSearch').focus();
-  });
+//  $('#zomatoModal').on('shown.bs.modal', function () {
+//    if ($('#zomatoCity').val().trim() == '')
+//      $('#zomatoCity').focus();
+//    else
+//      $('#zomatoSearch').focus();
+//  });
 
   $('#zomatoComponent .res').on('click', function () {
     $('#location').val($(this).find('.res_name').text());

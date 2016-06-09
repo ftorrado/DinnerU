@@ -17,6 +17,11 @@
   </div>
 </div>
 
+<div class="popular_search">
+  <span id="city_search_text">Restaurants</span> in <span id="city_name_text"></span>
+  <span class='sort-text'>SORTED BY POPULARITY</span>
+</div>
+
 <div id="res_results" style="height: 500px;">
   <%= render 'zomato/restaurant_list' %>
 </div>
@@ -30,7 +35,7 @@
 </div>
 
 <script>
-  var request_params = JSON.parse('{"sort":"pd","language_id":1}');
+  var request_params = JSON.parse('{"sort":"pd","language_id":1,"city_id":0}');
   var city_typeahead, search_timer = null, entity_type, entity_id = 0;
 
   $(document).ready(function() {
@@ -52,9 +57,18 @@
       }
       var searchData = request_params;
       searchData.q = search_input.length ? search_input.val() : '';
-      if (searchData.city_id == 0) {
-        $('.search_txt>span').html('Restaurants Nearby');
+      $('.popular_search #city_search_text')
+          .text((searchData.q != '' ? '"'+searchData.q+'"' : 'Restaurants'));
+      var city_text = '(no location)';
+      if (searchData.city_id != 0) {
+        city_text = request_params.city_name;
       }
+      else if (isset(currentPosition)) {
+        city_text = 'nearby area';
+        searchData.lat = currentPosition.latitude;
+        searchData.lon = currentPosition.longitude;
+      }
+      $('.popular_search #city_name_text').text(city_text);
       res_xhr = $.ajax({
         url: '<%= url_for controller: 'zomato', action: 'restaurants', format: :js %>',
         datatype: 'script',
@@ -77,7 +91,7 @@
         city_suggestion_xhr.abort();
       }
       var data_params = {'q': query};
-      if (!!currentPosition) {
+      if (isset(currentPosition)) {
         data_params['lat'] = currentPosition.latitude;
         data_params['lon'] = currentPosition.longitude;
       }
@@ -104,9 +118,9 @@
 
     // Do search if the user position is available
     $('#zomatoModal').on('shown.bs.modal', function () {
-      if (!!currentPosition) {city_typeahead.lookup();}
       resSearch();
     });
+    resSearch();
 
     $("#zomatoSearch").keyup(function () {
       if (search_timer != null) {

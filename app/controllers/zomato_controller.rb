@@ -16,8 +16,11 @@ class ZomatoController < ApplicationController
   end
 
   def restaurants
-    request_params = { query: params[:q] }
-    if params[:city_id]
+    request_params = { }
+    request_params.merge!(q: params[:q]) if params[:q].present?
+    if params[:lat]
+      request_params.merge!(lat: params[:lat], long: params[:lon])
+    elsif params[:city_id] && params[:city_id] != '0'
       request_params.merge!(entity_id: params[:city_id], entity_type: 'city')
     end
     req_result = api_get_request 'search', request_params
@@ -35,11 +38,12 @@ class ZomatoController < ApplicationController
       uri_str = URI.escape("#{API_HOST}#{endpoint}")
       uri_str += '?' if query_params.length > 0
       query_params.each do |key, value|
-        uri_str += URI.escape("#{key}=#{value}")
+        uri_str += URI.escape("#{key}=#{value}&")
       end
-      uri_str.chomp if query_params.length > 0
+      uri_str.chomp!('&') if query_params.length > 0
 
       uri = URI.parse(uri_str)
+      logger.debug uri
       request = Net::HTTP::Get.new(uri)
       request['Accept'] = 'application/json'
       request['user-key'] = '32358c30e1e96103a5da0147d503d8ef'

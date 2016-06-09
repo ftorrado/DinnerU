@@ -36,7 +36,7 @@
       </div>
       <div class='rating right' style='background-color:#<%=
         restaurant['user_rating']['rating_color'] %>'>
-        <%= restaurant['user_rating']['rating_display'] %>
+        <%= restaurant['user_rating']['aggregate_rating'] %>
       </div>
       <div class='clear'></div>
     </div>
@@ -54,31 +54,20 @@
 
   <script>
     $(document).ready(function() {
-      var selectRestaurant = function () {
-        restaurantName = $(this).text();
-        $('#zomatoRestaurant').html(restaurantName);
+      $('.res').on('click', function (evt) {
+        evt.preventDefault();
+        var restaurantName = $(this).find('.res_name').text().trim();
         $('#location').val(restaurantName);
-      };
-      $('.res_name').on('click', selectRestaurant);
+        $('#zomatoModal').modal('hide');
+      });
 
       <% if params[:entity_id] && params[:entity_type] %>
-      if (entity_id == 0) {
-        entity_id = <%= params[:entity_id] %>;
-        entity_type = '<%= params[:entity_type] %>';
-      }
+        if (entity_id == 0) {
+          entity_id = <%= params[:entity_id] %>;
+          entity_type = '<%= params[:entity_type] %>';
+        }
       <% end %>
       $('.res_info').width($('.res_info').parent().width() - $('.res_img').width());
-      <% if @restaurants['heading'].present? %>
-      $('.no_search_txt>span').html(<%= @restaurants['heading'] %>);
-      <% end %>
-      <% if @restaurants['search_title'] %>
-      $('.popular_search').html(<%= "#{@restaurants['search_title']}" +
-      "<span class='sort-text'>#{@restaurants['sort_text']}</span>" %>);
-      <% end %>
-      $('a:not(.powered_by)').removeClass('theme-red-foreground, theme-dark-foreground')
-          .addClass('theme-red-foreground');
-      $('button').removeClass('theme-red-background, theme-dark-background')
-          .addClass('theme-red-background');
     });
   </script>
 <% end %>
