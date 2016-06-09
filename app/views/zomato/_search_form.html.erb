@@ -1,4 +1,4 @@
-<div class="form-horizontal" style="max-width: 550px">
+<div class="form-horizontal">
   <div class="form-group">
     <label class="col-xs-2 control-label">City:</label>
     <div class="col-xs-10">
@@ -11,32 +11,32 @@
     <label class="col-xs-2 control-label">Search:</label>
     <div class="col-xs-10">
       <input type="text" class="form-control" id="zomatoSearch"
-             placeholder="Search for restaurants on Zomato" autocomplete="off">
+             placeholder="Search for restaurants on Zomato" autocomplete="off"
+             <%= "value=#{params[:q]}" if params[:q] %>>
     </div>
   </div>
+</div>
 
-  <div id="res_results" style="height: 500px;"></div>
+<div id="res_results" style="height: 500px;">
+  <%= render 'zomato/restaurant_list' %>
+</div>
 
-  <div class="res_search_footer">
-    <img src="https://www.zomato.com/images/logo/icon_32x32.png" alt="Zomato" width="16px" height="auto">
-    <a class="powered_by" target="_blank" href="https://www.zomato.com/?utm_source=referral-widget&amp;utm_medium=restaurant_search_widget&amp;utm_campaign=widget-developers">Powered by Zomato</a>
-  </div>
-  <div id="loading" style="display: none;">
-    <img src="https://www.zomato.com/images/loading-transparent-red.gif">
-  </div>
+<div class="res_search_footer">
+  <img src="https://www.zomato.com/images/logo/icon_32x32.png" alt="Zomato" width="16px" height="auto">
+  <a class="powered_by" target="_blank" href="https://www.zomato.com/?utm_source=referral-widget&amp;utm_medium=restaurant_search_widget&amp;utm_campaign=widget-developers">Powered by Zomato</a>
+</div>
+<div id="loading" style="display: none;">
+  <img src="https://www.zomato.com/images/loading-transparent-red.gif">
 </div>
 
 <script>
   var request_params = JSON.parse('{"sort":"pd","language_id":1}');
-  var city_typeahead, search_timer = null;
+  var city_typeahead, search_timer = null, entity_type, entity_id = 0;
 
   $(document).ready(function() {
     // Some code from Zomato widget
     // https://www.zomato.com/widgets/res_search_widget.php
-    var utm_params = 'utm_source=referral-widget&utm_medium=' +
-        'restaurant_search_widget&utm_campaign=widget-developers';
-    var HOST = 'https://www.zomato.com/';
-    var res_xhr, city_suggestion_xhr, entity_type, entity_id = 0;
+    var res_xhr, city_suggestion_xhr;
 
     $(document).ajaxStart(function () {
       $("#loading").show();
@@ -47,12 +47,11 @@
 
     var resSearch = function () {
       var search_input = $("#zomatoSearch");
-      var q = search_input.length ? search_input.val() : '';
       if (res_xhr && res_xhr.readystate != 4) {
         res_xhr.abort();
       }
       var searchData = request_params;
-      searchData.q = q;
+      searchData.q = search_input.length ? search_input.val() : '';
       if (searchData.city_id == 0) {
         $('.search_txt>span').html('Restaurants Nearby');
       }
@@ -104,12 +103,10 @@
     });
 
     // Do search if the user position is available
-    setTimeout(function () {
-      if (!!currentPosition) {
-        city_typeahead.lookup('');
-      }
-    }, 2000);
-    search_timer = setTimeout(resSearch, 2000);
+    $('#zomatoModal').on('shown.bs.modal', function () {
+      if (!!currentPosition) {city_typeahead.lookup();}
+      resSearch();
+    });
 
     $("#zomatoSearch").keyup(function () {
       if (search_timer != null) {

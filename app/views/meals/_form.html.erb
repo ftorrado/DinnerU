@@ -93,8 +93,8 @@
   </div>
 </div>
 
-<div class="modal fade" id="restaurantModal" tabindex="-1"
-     role="dialog" aria-labelledby="locationModalLabel">
+<div class="modal fade" id="zomatoModal" tabindex="-1"
+     role="dialog" aria-labelledby="zomatoModalLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -156,8 +156,11 @@
   });
 
   // Zomato restaurant picker
-  $('#zomatoComponent').on('shown.bs.modal', function () {
-    $('#zomatoCity').focus();
+  $('#zomatoModal').on('shown.bs.modal', function () {
+    if ($('#zomatoCity').val().trim() == '')
+      $('#zomatoCity').focus();
+    else
+      $('#zomatoSearch').focus();
   });
 
   $('#zomatoComponent .res').on('click', function () {

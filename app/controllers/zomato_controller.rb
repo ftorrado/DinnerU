@@ -23,7 +23,8 @@ class ZomatoController < ApplicationController
     req_result = api_get_request 'search', request_params
     @restaurants = JSON.parse(req_result)
     respond_to do |format|
-      format.html { render '_restaurant_list' }
+      format.html
+      format.js
       format.json { render json: req_result }
     end
   end

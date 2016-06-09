@@ -8,10 +8,15 @@
       <div class='left'>
         <div class='left res_img'>
           <img src='<%=
-            restaurant['thumb'] if restaurant['thumb']
-            restaurant['featuredImage'] if restaurant['featuredImage']
-            restaurant['photos'][0]['photo']['thumbUrl'] if restaurant['photos'].present?
-            'https://b.zmtcdn.com/images/photoback.png' %>' />
+            if restaurant['thumb']
+              restaurant['thumb']
+            elsif restaurant['featuredImage']
+              restaurant['featuredImage']
+            elsif restaurant['photos'].present?
+              restaurant['photos'][0]['photo']['thumbUrl']
+            else
+              'https://b.zmtcdn.com/images/photoback.png'
+            end %>' />
         </div>
         <div class='left res_info'>
           <a target='_blank' class='res_name'
@@ -46,30 +51,34 @@
       <% end %>
     </a>
   </div>
+
+  <script>
+    $(document).ready(function() {
+      var selectRestaurant = function () {
+        restaurantName = $(this).text();
+        $('#zomatoRestaurant').html(restaurantName);
+        $('#location').val(restaurantName);
+      };
+      $('.res_name').on('click', selectRestaurant);
+
+      <% if params[:entity_id] && params[:entity_type] %>
+      if (entity_id == 0) {
+        entity_id = <%= params[:entity_id] %>;
+        entity_type = '<%= params[:entity_type] %>';
+      }
+      <% end %>
+      $('.res_info').width($('.res_info').parent().width() - $('.res_img').width());
+      <% if @restaurants['heading'].present? %>
+      $('.no_search_txt>span').html(<%= @restaurants['heading'] %>);
+      <% end %>
+      <% if @restaurants['search_title'] %>
+      $('.popular_search').html(<%= "#{@restaurants['search_title']}" +
+      "<span class='sort-text'>#{@restaurants['sort_text']}</span>" %>);
+      <% end %>
+      $('a:not(.powered_by)').removeClass('theme-red-foreground, theme-dark-foreground')
+          .addClass('theme-red-foreground');
+      $('button').removeClass('theme-red-background, theme-dark-background')
+          .addClass('theme-red-background');
+    });
+  </script>
 <% end %>
-
-<script>
-  $(document).ready(function() {
-    var selectRestaurant = function () {
-      restaurantName = $(this).text();
-      $('#zomatoRestaurant').html(restaurantName);
-      $('#location').val(restaurantName);
-    };
-
-    $('.res_name').on('click', selectRestaurant);
-
-    if (entity_id == 0) {
-      entity_id = <%= params[:entity_id] %>;
-      entity_type = '<%= params[:entity_type] %>';
-    }
-    $('.res_info').width($('.res_info').parent().width() - $('.res_img').width());
-    if (res['heading'] && res.heading != '') {
-      $('.no_search_txt>span').html(res.heading);
-    }
-    if (res['search_title'] && res.search_title != '') {
-      $('.popular_search').html(res.search_title + "<span class='sort-text'>" + res['sort_text'] + "</span>");
-    }
-    $('a:not(.powered_by)').removeClass('theme-red-foreground, theme-dark-foreground').addClass('theme-red-foreground');
-    $('button').removeClass('theme-red-background, theme-dark-background').addClass('theme-red-background');
-  });
-</script>
