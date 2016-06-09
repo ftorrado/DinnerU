@@ -19,5 +19,10 @@ Rails.application.routes.draw do
   end
   resources :dishes
 
+  scope 'zomato/' do
+    get 'locations' => 'zomato#locations'
+    get 'restaurants' => 'zomato#restaurants'
+  end
+
   # mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
 end

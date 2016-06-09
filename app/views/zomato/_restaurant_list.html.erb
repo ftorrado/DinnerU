@@ -1,0 +1,73 @@
+<% if @restaurants.nil? || @restaurants['results_found'] == 0 %>
+  <div class='clearfix res'>No results found</div>
+<% else %>
+  <% @restaurants['restaurants'].each do |restaurantContainer| %>
+    <% restaurant = restaurantContainer['restaurant'] %>
+    <% next unless restaurant['id'] #skip when there is no id %>
+    <div class='clearfix res'>
+      <div class='left'>
+        <div class='left res_img'>
+          <img src='<%=
+            if restaurant['thumb']
+              restaurant['thumb']
+            elsif restaurant['featuredImage']
+              restaurant['featuredImage']
+            elsif restaurant['photos'].present?
+              restaurant['photos'][0]['photo']['thumbUrl']
+            else
+              'https://b.zmtcdn.com/images/photoback.png'
+            end %>' />
+        </div>
+        <div class='left res_info'>
+          <a target='_blank' class='res_name'
+             href='http://zoma.to/r/<%= restaurant['id'] %>'>
+            <span><%= restaurant['name'] %></span>
+          </a>
+          <div class='res_loc'><%= restaurant['location']['locality'] %></div>
+          <div class='res_type_wrap'>
+            <span class='res_type'><%=
+              if restaurant['establishmentTypes'] && restaurant['establishmentTypes'].present?
+                restaurant['establishmentTypes'][0]['establishment_type']['name'] + ': '
+              end
+            %></span>
+            <span class='res_cuisines'><%= restaurant['cuisines'] %></span>
+          </div>
+        </div>
+      </div>
+      <div class='rating right' style='background-color:#<%=
+        restaurant['user_rating']['rating_color'] %>'>
+        <%= restaurant['user_rating']['aggregate_rating'] %>
+      </div>
+      <div class='clear'></div>
+    </div>
+  <% end %>
+
+  <div class='clear'>
+    <a target='_blank' href='<%= url_full_list(params) %>' class='see_all'>
+      <% if @restaurants['results_shown'] < @restaurants['results_found'] %>
+        See more
+      <% else %>
+        See all
+      <% end %>
+    </a>
+  </div>
+
+  <script>
+    $(document).ready(function() {
+      $('.res').on('click', function (evt) {
+        evt.preventDefault();
+        var restaurantName = $(this).find('.res_name').text().trim();
+        $('#location').val(restaurantName);
+        $('#zomatoModal').modal('hide');
+      });
+
+      <% if params[:entity_id] && params[:entity_type] %>
+        if (entity_id == 0) {
+          entity_id = <%= params[:entity_id] %>;
+          entity_type = '<%= params[:entity_type] %>';
+        }
+      <% end %>
+      $('.res_info').width($('.res_info').parent().width() - $('.res_img').width());
+    });
+  </script>
+<% end %>

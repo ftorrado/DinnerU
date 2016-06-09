@@ -70,6 +70,13 @@ class MealsController < ApplicationController
     redirect_to @meal
   end
 
+  def zomato_search
+    url_str = URI.escape('https://www.zomato.com/widgets/res_search_widget.php')
+    url = URI.parse(url_str)
+    result = Net::HTTP.get_response(url)
+    render text: result.body
+  end
+
   private
 
     def meal_params

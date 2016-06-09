@@ -1,0 +1,133 @@
+<div class="form-horizontal">
+  <div class="form-group">
+    <label class="col-xs-2 control-label">City:</label>
+    <div class="col-xs-10">
+      <input type="text" class="form-control" id="zomatoCity"
+             placeholder="Please type a location..." autocomplete="off">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="col-xs-2 control-label">Search:</label>
+    <div class="col-xs-10">
+      <input type="text" class="form-control" id="zomatoSearch"
+             placeholder="Search for restaurants on Zomato" autocomplete="off"
+             <%= "value=#{params[:q]}" if params[:q] %>>
+    </div>
+  </div>
+</div>
+
+<div class="popular_search">
+  <span id="city_search_text">Restaurants</span> in <span id="city_name_text"></span>
+  <span class='sort-text'>SORTED BY POPULARITY</span>
+</div>
+
+<div id="res_results" style="height: 500px;">
+  <%= render 'zomato/restaurant_list' %>
+</div>
+
+<div class="res_search_footer">
+  <img src="https://www.zomato.com/images/logo/icon_32x32.png" alt="Zomato" width="16px" height="auto">
+  <a class="powered_by" target="_blank" href="https://www.zomato.com/?utm_source=referral-widget&amp;utm_medium=restaurant_search_widget&amp;utm_campaign=widget-developers">Powered by Zomato</a>
+</div>
+<div id="loading" style="display: none;">
+  <img src="https://www.zomato.com/images/loading-transparent-red.gif">
+</div>
+
+<script>
+  var request_params = JSON.parse('{"sort":"pd","language_id":1,"city_id":0}');
+  var city_typeahead, search_timer = null, entity_type, entity_id = 0;
+
+  $(document).ready(function() {
+    // Some code from Zomato widget
+    // https://www.zomato.com/widgets/res_search_widget.php
+    var res_xhr, city_suggestion_xhr;
+
+    $(document).ajaxStart(function () {
+      $("#loading").show();
+    });
+    $(document).ajaxStop(function () {
+      $("#loading").hide();
+    });
+
+    var resSearch = function () {
+      var search_input = $("#zomatoSearch");
+      if (res_xhr && res_xhr.readystate != 4) {
+        res_xhr.abort();
+      }
+      var searchData = request_params;
+      searchData.q = search_input.length ? search_input.val() : '';
+      $('.popular_search #city_search_text')
+          .text((searchData.q != '' ? '"'+searchData.q+'"' : 'Restaurants'));
+      var city_text = '(no location)';
+      if (searchData.city_id != 0) {
+        city_text = request_params.city_name;
+      }
+      else if (isset(currentPosition)) {
+        city_text = 'nearby area';
+        searchData.lat = currentPosition.latitude;
+        searchData.lon = currentPosition.longitude;
+      }
+      $('.popular_search #city_name_text').text(city_text);
+      res_xhr = $.ajax({
+        url: '<%= url_for controller: 'zomato', action: 'restaurants', format: :js %>',
+        datatype: 'script',
+        data: searchData
+      });
+    };
+
+    var selectCity = function (city) {
+      request_params.city_id = city.city_id;
+      request_params.entity_id = city.entity_id;
+      request_params.entity_type = city.entity_type;
+      request_params.city_name = city.city_name;
+      $("#zomatoCity").val(city.title);
+      $("#zomatoSearch").val("");
+      resSearch();
+    };
+
+    var citySearch = function (query, process) {
+      if (city_suggestion_xhr && city_suggestion_xhr.readystate != 4) {
+        city_suggestion_xhr.abort();
+      }
+      var data_params = {'q': query};
+      if (isset(currentPosition)) {
+        data_params['lat'] = currentPosition.latitude;
+        data_params['lon'] = currentPosition.longitude;
+      }
+      city_suggestion_xhr = $.ajax({
+        url: '/zomato/locations.json',
+        dataType: 'json',
+        data: data_params,
+        success: function (cities) {
+          var city_items = cities.location_suggestions;
+          for (var i = 0; i < city_items.length; i++) {
+            city_items[i].name = city_items[i].title;
+          }
+          process(city_items);
+        }
+      });
+    };
+
+    city_typeahead = $('#zomatoCity').typeahead({
+      minLength: 0,
+      showHintOnFocus: true,
+      source: citySearch,
+      afterSelect: selectCity
+    });
+
+    // Do search if the user position is available
+    $('#zomatoModal').on('shown.bs.modal', function () {
+      resSearch();
+    });
+    resSearch();
+
+    $("#zomatoSearch").keyup(function () {
+      if (search_timer != null) {
+        clearTimeout(search_timer);
+        search_timer = null;
+      }
+      search_timer = setTimeout(resSearch, 500);
+    });
+  });
+</script>
