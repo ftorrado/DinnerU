@@ -4,7 +4,7 @@ Small application to schedule meals and plan in advance what you will order to e
 
 === TODO
 
-* Use something like Zomato as an alternative to the current address location selector.
+* ~~Use something like Zomato as an alternative to the current address location selector.~~
 * Invites to meals via email with unique token, registering new emails as guest users. Using own data model for Invitation.
 * Should do proper email confirmation, probably using the "Devise" gem, no reason to do it manually
 * Usage of guest users (removed feature)
