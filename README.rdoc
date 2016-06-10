@@ -2,15 +2,21 @@
 
 Small application to schedule meals and plan in advance what you will order to eat!
 
+=== Features
+
+* Create simple dish objects with textual information
+* Create, browse and view meal events: public/private, visible/hidden
+* Invite users to meal events, if creator
+* Pick a location for the meal event with Google Maps or a restaurant using search from Zomato API
+* Select multiple dishes you are going to order at the meal, if owner, invited or public meal
+
 === TODO
 
-* ~~Use something like Zomato as an alternative to the current address location selector.~~
 * Invites to meals via email with unique token, registering new emails as guest users. Using own data model for Invitation.
 * Should do proper email confirmation, probably using the "Devise" gem, no reason to do it manually
 * Usage of guest users (removed feature)
 * Testing the "Pundit" authorization rules should be done seperatly as integration tests (pundit/rspec)
-* Missing authorization rules for Orders, should have it even as embedded object?
-* At least +Meal+ and +Dish+ indexes should have pagination
+* At least +Meal+ and +Dish+ index pages should have pagination
 * Passing variables to partial views is sketchy and not consistent, how to manage having different possible parent models like in the case of comments?
 * Images for users and dishes
 * Shallower data and link structure
